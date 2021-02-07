@@ -1,15 +1,14 @@
 {
   "name": "create-kintone-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "A CLI tool for creating kintone app development templates",
   "bin": {
     "create-kintone-app": "./bin/cli.js"
   },
-  "keywords": [],
+  "keywords": [
+    "kintone",
+    "template"
+  ],
   "author": "cyao",
   "license": "MIT",
   "devDependencies": {
