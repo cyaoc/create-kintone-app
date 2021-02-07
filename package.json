@@ -1,0 +1,31 @@
+{
+  "name": "create-kintone-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "create-kintone-app": "./bin/cli.js"
+  },
+  "keywords": [],
+  "author": "cyao",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "commander": "^6.2.1",
+    "handlebars": "^4.7.6",
+    "inquirer": "^7.3.3",
+    "ncp": "^2.0.0",
+    "ora": "^5.2.0",
+    "shelljs": "^0.8.4"
+  }
+}

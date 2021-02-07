@@ -1,0 +1,57 @@
+const fs = require('fs')
+const ncp = require('ncp')
+const path = require('path')
+const handlebars = require('handlebars')
+const util = require('util')
+const templateDir = path.resolve(__dirname, '../templates')
+
+const directoryExists = (filePath) => {
+  return fs.existsSync(filePath)
+}
+
+const compile = (meta, file, dir) => {
+  const content = fs.readFileSync(file).toString()
+  const result = handlebars.compile(content)(meta)
+  let target = file.replace(templateDir, dir).split('.').slice(0, -1).join('.')
+  if (file === path.join(templateDir, 'src', 'index.tpl')) {
+    target += meta.suffix
+  }
+  fs.writeFileSync(target, result)
+}
+
+const ignore = (options) => {
+  const set = new Set()
+  if (!options.style.css) {
+    set.add(path.join(templateDir, '.stylelintrc.js')).add(path.join(templateDir, 'src', 'app.css'))
+  }
+  if (!options.typescript) {
+    set.add(path.join(templateDir, 'tsconfig.json.tpl')).add(path.join(templateDir, 'src', 'fields.d.ts'))
+  }
+  return set
+}
+
+const output = (filePath, options) => {
+  const ignoreList = ignore(options)
+  const filter = {
+    filter: (source) => {
+      if (!fs.lstatSync(source).isDirectory()) {
+        if (ignoreList.has(source)) {
+          return false
+        }
+        if (path.extname(source) === '.tpl') {
+          compile(options, source, filePath)
+          return false
+        }
+      }
+      return true
+    },
+  }
+  const npcp = util.promisify(ncp)
+  return npcp(templateDir, filePath, filter)
+}
+
+module.exports = Object.freeze({
+  directoryExists,
+  compile,
+  output,
+})
