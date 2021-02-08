@@ -43,7 +43,7 @@ program.arguments('<project-directory>').action(async (projectName) => {
     ${cmd(`npm run lint`)}
       Finds problems in your code.
 
-    ${cmd(`npm run formart`)}
+    ${cmd(`npm run format`)}
       Formats the code.
 
       `)
