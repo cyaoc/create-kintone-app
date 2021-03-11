@@ -21,11 +21,19 @@ const compile = (meta, file, dir) => {
 
 const ignore = (options) => {
   const set = new Set()
-  if (!options.style.css) {
-    set.add(path.join(templateDir, '.stylelintrc.js')).add(path.join(templateDir, 'src', 'app.css'))
+  if (options.vue) {
+    set.add(path.join(templateDir, 'src', 'app.css'))
+  } else {
+    set.add(path.join(templateDir, 'src', 'App.vue'))
+    set.add(path.join(templateDir, 'src', 'shims-vue.d.ts'))
   }
   if (!options.typescript) {
-    set.add(path.join(templateDir, 'tsconfig.json.tpl')).add(path.join(templateDir, 'src', 'fields.d.ts'))
+    set
+      .add(path.join(templateDir, 'tsconfig.json.tpl'))
+      .add(path.join(templateDir, 'src', 'fields.d.ts'))
+      .add(path.join(templateDir, 'src', 'shims-vue.d.ts'))
+  } else {
+    set.add(path.join(templateDir, 'jsconfig.json'))
   }
   return set
 }

@@ -1,12 +1,13 @@
 const { resolve } = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
-{{#if style.css}}
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-{{/if}}
 {{#if typescript}}
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 {{/if}}
-{{#if style.css}}
+{{#if vue}}
+const { VueLoaderPlugin } = require('vue-loader')
+{{/if}}
+
 const cssLoaders = (preNumber) => [
   isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
   {
@@ -38,7 +39,6 @@ const cssLoaders = (preNumber) => [
     },
   },
 ]
-{{/if}}
 
 module.exports = {
   target: isDev ? 'web' : 'browserslist',
@@ -58,15 +58,18 @@ module.exports = {
   //   'react-dom': 'ReactDOM',
   // },
   {{/if}}
-  {{#if typescript}}
   plugins: [
+  {{#if typescript}}
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         configFile: resolve(__dirname, '../tsconfig.json'),
       },
     }),
-  ],
   {{/if}}
+  {{#if vue}}
+    new VueLoaderPlugin(),
+  {{/if}}
+  ],
   module: {
     rules: [
       {
@@ -75,12 +78,16 @@ module.exports = {
         options: { cacheDirectory: true },
         exclude: /node_modules/,
       },
-      {{#if style.css}}
+      {{#if vue}}
+      {
+        test: /.vue$/,
+        use: 'vue-loader',
+      },
+      {{/if}}
       {
         test: /\.css$/,
         use: cssLoaders(0),
       },
-      {{/if}}
       {{#if style.less}}
       {
         test: /\.less$/,

@@ -2,33 +2,37 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 {{/if}}
-{{#if style.css}}
+{{#if vue}}
+import { createApp } from 'vue'
+import App from './App.vue'
+{{else}}
 import './app.css'
 {{/if}}
 {{#if typescript}}
+
 interface KintoneEvent {
   record: kintone.types.SavedFields
 }
 {{/if}}
 {{#if react}}
-const App = () => {
-  return (
-    {{#if style.css}}
-    <div className="app">
-    {{else}}
-    <div>
-    {{/if}}
-      <h1>hello, kintone!</h1>
-    </div>
-  )
-}
+
+const App = () => (
+  <div className="app">
+    <h1>hello, kintone!</h1>
+  </div>
+)
 {{/if}}
+
 kintone.events.on('app.record.index.show', (event{{#if typescript}}: KintoneEvent{{/if}}) => {
 {{#if react}}
   ReactDOM.render(<App />, kintone.app.getHeaderSpaceElement())
 {{else}}
   const myContainer = kintone.app.getHeaderSpaceElement(){{#if typescript}} as HTMLInputElement{{/if}}
-  myContainer.innerHTML = '<div{{#if style.css}} class="app"{{/if}}><h1>hello, kintone!</h1></div>'
+  {{#if vue}}
+  createApp(App).mount(myContainer)
+  {{else}}
+  myContainer.innerHTML = '<div class="app"><h1>hello, kintone!</h1></div>'
+  {{/if}}
 {{/if}}
   return event
 })

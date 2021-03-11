@@ -2,7 +2,6 @@ const chalk = require('chalk')
 const inquirer = require('inquirer')
 
 const warn = chalk.yellowBright
-//Which framework does your project use
 const questions = [
   // {
   //   type: 'list',
@@ -33,18 +32,23 @@ const questions = [
   },
   {
     type: 'checkbox',
-    message: 'Which of the following style sheet language do you want to use?',
+    message: 'Which of the following dynamic preprocessor style sheet language do you want to use?',
     name: 'css',
     choices: [
-      { name: 'css', value: 1, checked: true },
-      { name: 'less', value: 2 },
-      { name: 'scss', value: 3 },
+      { name: 'less', value: 1 },
+      { name: 'scss', value: 2 },
     ],
   },
   {
-    type: 'confirm',
-    message: 'Do you need to use React?',
-    name: 'react',
+    type: 'list',
+    message: 'Which Javascript library do you want to use?',
+    name: 'library',
+    choices: [
+      { name: 'none', value: 1 },
+      { name: 'React', value: 2 },
+      { name: 'Vue', value: 3 },
+    ],
+    default: 0,
   },
   {
     type: 'confirm',
@@ -63,15 +67,16 @@ module.exports = Object.freeze({
     return inquirer.prompt(questions)
   },
   options: (aws) => {
-    const css = Array.isArray(aws.css) && aws.css.length > 0
+    const react = aws.library === 2
+    const vue = aws.library === 3
     let extensions = ['.js']
     const tsex = ['.ts']
-    const suffix = aws.typescript && aws.react ? '.tsx' : aws.typescript ? '.ts' : '.js'
+    const suffix = aws.typescript && react ? '.tsx' : aws.typescript ? '.ts' : '.js'
     let validate = ['javascript']
     let tsv = ['typescript']
     let js = 'js'
     let ts = 'ts'
-    if (aws.react) {
+    if (react) {
       extensions.unshift('.jsx')
       validate.push('javascriptreact')
       tsv.push('typescriptreact')
@@ -87,10 +92,11 @@ module.exports = Object.freeze({
     return {
       ...aws,
       style: {
-        css,
-        less: css && aws.css.includes(2),
-        scss: css && aws.css.includes(3),
+        less: aws.css.includes(1),
+        scss: aws.css.includes(2),
       },
+      react,
+      vue,
       extensions,
       jsmatch: `/.${js}$/`,
       validate,

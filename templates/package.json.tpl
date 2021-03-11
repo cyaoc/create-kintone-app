@@ -4,11 +4,9 @@
   "description": "{{description}}",
   "scripts": {
     "format": "prettier --write src",
-    "lint": "npm run lint-eslint{{#if style.css}} && npm run lint-stylelint{{/if}}",
-    "lint-eslint": "eslint --fix -c .eslintrc.js --ext {{#each extensions}}{{this}}{{#if @last}}{{else}},{{/if}}{{/each}} src",
-    {{#if style.css}}
-    "lint-stylelint": "stylelint --config .stylelintrc.js src/**/*.{{#if style.less}}{css,less{{else if style.scss}}{css{{else}}css{{/if}}{{#if style.scss}},scss}{{else if style.less~}} }{{/if}}",
-    {{/if}}
+    "lint": "npm run lint-eslint && npm run lint-stylelint",
+    "lint-eslint": "eslint --fix -c .eslintrc.js --ext {{#each extensions}}{{this}}{{#if @last}}{{else}},{{/if}}{{/each}}{{#if vue}},.vue{{/if}} src",
+    "lint-stylelint": "stylelint --config .stylelintrc.js src/**/*.{{#if style.less}}{css,less{{else if style.scss}}{css{{else}}{{#if vue}}{css,vue}{{else}}css{{/if}}{{/if}}{{#if style.scss}},scss{{#if vue}},vue{{/if~}}}{{else if style.less}}{{#if vue}},vue{{/if~}}}{{/if}}",
     "start": "cross-env NODE_ENV=development webpack serve --config ./config/webpack.dev.js",
     "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js"
   },
@@ -32,8 +30,11 @@
     "@types/react-dom": "^17.0.0",
     {{/if}}
     {{/if}}
+    {{#if vue}}
+    "@vue/compiler-sfc": "^3.0.6",
+    "vue-loader": "^16.1.2",
+    {{/if}}
     "@babel/core": "^7.12.10",
-    "@babel/eslint-parser": "^7.12.1",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
@@ -43,9 +44,25 @@
     "cross-env": "^7.0.3",
     "devcert": "^1.1.3",
     "eslint": "^7.17.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    {{#if typescript}}
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    {{else}}
+    "@babel/eslint-parser": "^7.12.1",
+    {{/if}}
+    {{#if react}}
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    {{/if}}
+    {{#if vue}}
+    "eslint-plugin-vue": "^7.7.0",
+    "vue-eslint-parser": "^7.6.0",
+    {{/if}}
     "prettier": "^2.2.1",
-    {{#with style}}
-    {{#if css}}
     "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "glob": "^7.1.6",
@@ -63,7 +80,8 @@
     "stylelint-config-standard": "^20.0.0",
     "stylelint-declaration-block-no-ignored-properties": "^2.3.0",
     "stylelint-order": "^4.1.0",
-    {{/if}}
+    "stylelint-prettier": "^1.2.0",
+    {{#with style}}
     {{#if less}}
     "less": "^4.1.0",
     "less-loader": "^7.2.1",
@@ -85,6 +103,9 @@
     {{#if react}}
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    {{/if}}
+    {{#if vue}}
+    "vue": "^3.0.5",
     {{/if}}
     "@babel/runtime-corejs3": "^7.12.5"
   }
