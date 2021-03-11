@@ -1,14 +1,15 @@
 #! /usr/bin/env node
 const { program } = require('commander')
 const pkg = require('../package.json')
-const shell = require('shelljs')
+const spawn = require('cross-spawn')
 const chalk = require('chalk')
 const ora = require('ora')
 const os = require('os')
 const inquirer = require('./inquiry.js')
 const ioutil = require('./ioutil.js')
+const { O_DIRECT } = require('constants')
 const success = chalk.greenBright
-const cmd = chalk.blueBright
+const cmd = chalk.yellow
 
 program.version(pkg.version, '-v, --version').description(pkg.description)
 program.arguments('<project-directory>').action(async (projectName) => {
@@ -22,9 +23,9 @@ program.arguments('<project-directory>').action(async (projectName) => {
   })
   let msg = `${success(`Now you can start project with`)} cd ${projectName} && npm install`
   if (answers.install) {
-    shell.cd(projectDir)
-    if (shell.exec('npm install').code !== 0) {
-      shell.exit(1)
+    const result = spawn.sync('npm', ['install'], { stdio: 'inherit', cwd: projectDir })
+    if (result.error) {
+      process.exit(1)
     } else {
       msg = `${success(`We suggest that you begin by typing:`)} cd ${projectName} && npm start`
     }
