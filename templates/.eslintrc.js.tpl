@@ -18,9 +18,11 @@ module.exports = {
     {{#if vue}}
     'plugin:vue/vue3-recommended',
     {{/if}}
-    'airbnb',
     {{#if react}}
+    'airbnb',
     'airbnb/hooks',
+    {{else}}
+    'airbnb-base',
     {{/if}}
     'prettier',
     {{#if typescript}}
@@ -62,11 +64,4 @@ module.exports = {
     {{/if}}
     {{/if}}
   },
-  {{#if react}}
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
-  {{/if}}
 };
