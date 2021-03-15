@@ -5,8 +5,40 @@ const handlebars = require('handlebars')
 const util = require('util')
 const templateDir = path.resolve(__dirname, '../templates')
 
-const directoryExists = (filePath) => {
-  return fs.existsSync(filePath)
+const check = (dirpath, dirname) => {
+  if (/[\\/:*?"<>|]/im.test(dirname)) {
+    console.error(`Cannot create a project named "${dirname}", please choose a different project name.`)
+    return false
+  }
+  const isExists = getStat(dirpath)
+  if (isExists) {
+    if (isExists.isDirectory()) {
+      if (!isEmptyDir(dirpath)) {
+        console.error(`The directory ${dirname} contains files, please try using a new directory name.`)
+        return false
+      }
+    } else {
+      console.error(`${dirname} already exists, please try using a new directory name.`)
+      return false
+    }
+  }
+  return true
+}
+
+const getStat = (path) => {
+  try {
+    return fs.statSync(path)
+  } catch {
+    return false
+  }
+}
+
+const isEmptyDir = (path) => {
+  try {
+    return fs.readdirSync(path).length === 0
+  } catch {
+    return false
+  }
 }
 
 const compile = (meta, file, dir) => {
@@ -59,7 +91,7 @@ const output = (filePath, options) => {
 }
 
 module.exports = Object.freeze({
-  directoryExists,
+  check,
   compile,
   output,
 })
