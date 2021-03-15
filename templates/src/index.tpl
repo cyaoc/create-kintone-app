@@ -18,7 +18,7 @@ interface KintoneEvent {
 
 const App = () => (
   <div className="app">
-    <h1>hello, kintone!</h1>
+    <h1>Hello, kintone!</h1>
   </div>
 )
 {{/if}}
@@ -31,7 +31,7 @@ kintone.events.on('app.record.index.show', (event{{#if typescript}}: KintoneEven
   {{#if vue}}
   createApp(App).mount(myContainer)
   {{else}}
-  myContainer.innerHTML = '<div class="app"><h1>hello, kintone!</h1></div>'
+  myContainer.innerHTML = '<div class="app"><h1>Hello, kintone!</h1></div>'
   {{/if}}
 {{/if}}
   return event
