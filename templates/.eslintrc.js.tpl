@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   {{#if vue}}
   parser: 'vue-eslint-parser',
   {{else if typescript}}
