@@ -56,7 +56,7 @@ const ignore = (options) => {
   if (options.vue) {
     set.add(path.join(templateDir, 'src', 'app.css'))
   } else {
-    set.add(path.join(templateDir, 'src', 'App.vue'))
+    set.add(path.join(templateDir, 'src', 'App.vue.tpl'))
     set.add(path.join(templateDir, 'src', 'shims-vue.d.ts'))
   }
   if (!options.typescript) {

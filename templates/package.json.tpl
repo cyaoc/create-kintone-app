@@ -19,20 +19,34 @@
   "devDependencies": {
     {{#if react}}
     "@babel/preset-react": "^7.12.10",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     {{/if}}
     {{#if typescript}}
     "@babel/preset-typescript": "^7.12.7",
     "@kintone/dts-gen": "^3.1.0",
     "fork-ts-checker-webpack-plugin": "^6.1.0",
     "typescript": "^4.1.3",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
     {{#if react}}
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     {{/if}}
+    {{else}}
+    "@babel/eslint-parser": "^7.12.1",
     {{/if}}
     {{#if vue}}
+    {{#if vue2}}
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.12",
+    {{else}}
     "@vue/compiler-sfc": "^3.0.6",
     "vue-loader": "^16.1.2",
+    {{/if}}
+    "eslint-plugin-vue": "^7.7.0",
+    "vue-eslint-parser": "^7.6.0",
     {{/if}}
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
@@ -47,21 +61,7 @@
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
-    {{#if typescript}}
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    {{else}}
-    "@babel/eslint-parser": "^7.12.1",
-    {{/if}}
-    {{#if react}}
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    {{/if}}
-    {{#if vue}}
-    "eslint-plugin-vue": "^7.7.0",
-    "vue-eslint-parser": "^7.6.0",
-    {{/if}}
+    "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
     "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
@@ -103,7 +103,7 @@
     "react-dom": "^17.0.1",
     {{/if}}
     {{#if vue}}
-    "vue": "^3.0.5",
+    "vue": "^{{#if vue2}}2.6.12{{else}}3.0.5{{/if}}",
     {{/if}}
     "@babel/runtime-corejs3": "^7.12.5"
   }

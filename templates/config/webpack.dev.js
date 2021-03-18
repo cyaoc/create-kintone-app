@@ -9,7 +9,7 @@ module.exports = async () => {
     mode: 'development',
     devtool: 'eval-source-map',
     devServer: {
-      host,
+      host: host,
       port: 8080,
       stats: 'errors-only',
       clientLogLevel: 'silent',

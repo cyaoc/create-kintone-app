@@ -17,7 +17,11 @@ module.exports = {
     'plugin:react/recommended',
     {{/if}}
     {{#if vue}}
+    {{#if vue2}}
+    'plugin:vue/recommended',
+    {{else}}
     'plugin:vue/vue3-recommended',
+    {{/if}}
     {{/if}}
     {{#if react}}
     'airbnb',
@@ -25,7 +29,6 @@ module.exports = {
     {{else}}
     'airbnb-base',
     {{/if}}
-    'prettier',
     {{#if typescript}}
     '@cybozu/eslint-config/presets/typescript-prettier',
     'prettier/@typescript-eslint',
@@ -33,6 +36,10 @@ module.exports = {
     {{#if react}}
     'prettier/react',
     {{/if}}
+    {{#if vue}}
+    'prettier/vue',
+    {{/if}}
+    'plugin:prettier/recommended',
   ],
   parserOptions: {
     {{#if vue}}

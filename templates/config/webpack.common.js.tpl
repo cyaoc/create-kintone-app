@@ -97,6 +97,11 @@ module.exports = {
             loader: 'less-loader',
             options: {
               sourceMap: isDev,
+              {{#if vue3}}
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+              {{/if}}
             },
           },
         ],

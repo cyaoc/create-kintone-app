@@ -32,7 +32,7 @@ const questions = [
   },
   {
     type: 'checkbox',
-    message: 'Which of the following dynamic preprocessor style sheet language do you want to use?',
+    message: 'Which of the following CSS Pre-processors do you want to use?',
     name: 'css',
     choices: [
       { name: 'less', value: 1 },
@@ -46,8 +46,21 @@ const questions = [
     choices: [
       { name: 'none', value: 1 },
       { name: 'React', value: 2 },
-      { name: 'Vue', value: 3 },
+      { name: 'Vue.js', value: 3 },
     ],
+    default: 0,
+  },
+  {
+    type: 'list',
+    message: 'Which version do you want to choose?',
+    name: 'vue',
+    choices: [
+      { name: 'Vue 2.x(compatibility first)', value: 2 },
+      { name: 'Vue 3.x(new features first)', value: 3 },
+    ],
+    when(answers) {
+      return answers.library === 3
+    },
     default: 0,
   },
   {
@@ -97,6 +110,8 @@ module.exports = Object.freeze({
       },
       react,
       vue,
+      vue2: vue && aws.vue === 2,
+      vue3: vue && aws.vue === 3,
       extensions,
       jsmatch: `/.${js}$/`,
       validate,

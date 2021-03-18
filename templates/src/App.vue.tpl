@@ -1,10 +1,10 @@
 <template>
   <div class="app">
-    <h1>{{ msg }}</h1>
+    <h1>\{{ msg }}</h1>
   </div>
 </template>
 
-<script>
+<script{{#if typescript}} lang="ts"{{/if}}>
 export default {
   name: 'App',
   data() {
