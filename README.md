@@ -7,7 +7,7 @@ A CLI tool for creating kintone app development templates!
 You can use the following commands to create a project
 
 ```
-npx cyaoc@create-kintone-app ${name}
+npx create-kintone-app ${name}
 ```
 
 After the installation is successful, go to directory ${name}, you can run several commands:
