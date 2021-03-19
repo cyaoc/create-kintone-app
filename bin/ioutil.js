@@ -17,7 +17,7 @@ const getRealPath = (base, name) => {
   const dir = path.resolve(`${base}/${name}`)
   return {
     path: dir,
-    name: dir.match(/([^\/]*)\/*$/)[1],
+    name: path.basename(dir),
   }
 }
 
