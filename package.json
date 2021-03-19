@@ -5,6 +5,10 @@
   "bin": {
     "create-kintone-app": "./bin/cli.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cyaoc/create-kintone-app"
+  },
   "keywords": [
     "kintone",
     "template"
