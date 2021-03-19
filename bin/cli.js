@@ -12,45 +12,50 @@ const cmd = chalk.yellow
 
 program.version(pkg.version, '-v, --version').description(pkg.description)
 program.arguments('<project-directory>').action(async (projectName) => {
-  try {
-    const projectDir = `${process.cwd()}/${projectName}`
-    if (ioutil.check(projectDir, projectName)) {
-      const answers = await inquirer.answers()
-      const spinner = ora(`Creating a new kintone app in ${projectDir}.${os.EOL}`)
-      spinner.start()
-      await ioutil.output(projectDir, {
-        name: projectName,
-        ...inquirer.options(answers),
-      })
-      let msg = `${success(`Now you can start project with`)} cd ${projectName} && npm install`
-      if (answers.install) {
-        const result = spawn.sync('npm', ['install'], { stdio: 'inherit', cwd: projectDir })
-        if (result.error) {
-          throw result.error
+  if (ioutil.validate(projectName)) {
+    try {
+      const project = ioutil.getRealPath(process.cwd(), projectName)
+      if (project && ioutil.check(project.path, project.name)) {
+        const answers = await inquirer.answers()
+        const spinner = ora(`Creating a new kintone app in ${project.path}.${os.EOL}`)
+        spinner.start()
+        await ioutil.output(project.path, {
+          name: project.name,
+          ...inquirer.options(answers),
+        })
+        let msg = `${success(`Now you can start project with`)}
+  ${cmd(`cd ${project.path}`)}
+  ${cmd(`npm install`)}`
+        if (answers.install) {
+          const result = spawn.sync('npm', ['install'], { stdio: 'inherit', cwd: project.path })
+          if (result.error) {
+            throw result.error
+          }
+          msg = `${success(`We suggest that you begin by typing:`)}
+  ${cmd(`cd ${project.path}`)}
+  ${cmd(`npm start`)}`
         }
-        msg = `${success(`We suggest that you begin by typing:`)} cd ${projectName} && npm start`
+        spinner.succeed(success(`Success! Created ${project.name} at ${project.path}.`))
+        spinner.info(msg)
+        spinner.info(`${success(`Inside that directory, you can run several commands:`)}
+
+  ${cmd(`npm start`)}
+  Starts the development server.
+  Please set ${success(`https://localhost:8080/js/app.js`)} to kintone's custom js field
+
+  ${cmd(`npm run build`)}
+  Builds optimized code under the dist directory.
+
+  ${cmd(`npm run lint`)}
+  Finds problems in your code.
+
+  ${cmd(`npm run format`)}
+  Formats the code.
+`)
       }
-      spinner.succeed(success(`Success! Created ${projectName} at ${projectDir}.`))
-      spinner.info(msg)
-      spinner.info(`${success(`Inside that directory, you can run several commands:`)}
-
-        ${cmd(`npm start`)}
-          Starts the development server.
-          Please set 'https://localhost:8080/js/app.js' to kintone's custom js field
-
-        ${cmd(`npm run build`)}
-          Builds optimized code under the dist directory.
-
-        ${cmd(`npm run lint`)}
-          Finds problems in your code.
-
-        ${cmd(`npm run format`)}
-          Formats the code.
-
-          `)
+    } catch (err) {
+      console.error(err)
     }
-  } catch (err) {
-    console.error(err)
   }
 })
 

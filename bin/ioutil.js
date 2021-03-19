@@ -5,11 +5,23 @@ const handlebars = require('handlebars')
 const util = require('util')
 const templateDir = path.resolve(__dirname, '../templates')
 
-const check = (dirpath, dirname) => {
-  if (/[\\/:*?"<>|]/im.test(dirname)) {
-    console.error(`Cannot create a project named "${dirname}", please choose a different project name.`)
+const validate = (input) => {
+  if (/[\\/:*?"<>|]/im.test(input)) {
+    console.error(`Cannot create a project named "${input}", please choose a different project name.`)
     return false
   }
+  return true
+}
+
+const getRealPath = (base, name) => {
+  const dir = path.resolve(`${base}/${name}`)
+  return {
+    path: dir,
+    name: dir.match(/([^\/]*)\/*$/)[1],
+  }
+}
+
+const check = (dirpath, dirname) => {
   const isExists = getStat(dirpath)
   if (isExists) {
     if (isExists.isDirectory()) {
@@ -91,6 +103,8 @@ const output = (filePath, options) => {
 }
 
 module.exports = Object.freeze({
+  validate,
+  getRealPath,
   check,
   compile,
   output,

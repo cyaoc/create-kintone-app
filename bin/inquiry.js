@@ -32,7 +32,7 @@ const questions = [
   },
   {
     type: 'checkbox',
-    message: 'Which of the following CSS Pre-processors do you want to use?',
+    message: 'Which CSS Pre-processors do you want to use?',
     name: 'css',
     choices: [
       { name: 'less', value: 1 },
