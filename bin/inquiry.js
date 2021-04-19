@@ -3,16 +3,16 @@ const inquirer = require('inquirer')
 
 const warn = chalk.yellowBright
 const questions = [
-  // {
-  //   type: 'list',
-  //   message: 'What kind of development do you want to do?',
-  //   name: 'app',
-  //   choices: [
-  //     { name: 'Custom App', value: 1 },
-  //     { name: 'Plugin', value: 2 },
-  //   ],
-  //   default: 0,
-  // },
+  {
+    type: 'list',
+    message: 'What kind of development do you want to do?',
+    name: 'app',
+    choices: [
+      { name: 'Custom App', value: 1 },
+      { name: 'Plugin', value: 2 },
+    ],
+    default: 0,
+  },
   {
     type: 'author',
     message: `Please enter the author's name`,
@@ -80,6 +80,7 @@ module.exports = Object.freeze({
     return inquirer.prompt(questions)
   },
   options: (aws) => {
+    const plugin = aws.app === 2
     const react = aws.library === 2
     const vue = aws.library === 3
     let extensions = ['.js']
@@ -104,6 +105,7 @@ module.exports = Object.freeze({
     }
     return {
       ...aws,
+      plugin,
       style: {
         less: aws.css.includes(1),
         scss: aws.css.includes(2),

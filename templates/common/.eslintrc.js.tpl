@@ -69,6 +69,8 @@ module.exports = {
     {{#if typescript}}
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
+    {{else}}
+    'react/prop-types': 'off',
     {{/if}}
     {{/if}}
   },

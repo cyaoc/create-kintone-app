@@ -1,3 +1,15 @@
+{{#if plugin}}
+declare namespace kintone {
+  const $PLUGIN_ID: string
+}
+{{#if react}}
+
+type ConfigProps = {
+  message: string
+}
+{{/if}}
+
+{{/if}}
 declare namespace kintone.types {
   interface Fields {}
   interface SavedFields extends Fields {
@@ -9,4 +21,8 @@ declare namespace kintone.types {
     创建时间: kintone.fieldTypes.CreatedTime
     key: kintone.fieldTypes.RecordNumber
   }
+}
+
+interface KintoneEvent {
+  record: kintone.types.SavedFields
 }

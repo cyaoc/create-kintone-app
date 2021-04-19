@@ -1,0 +1,12 @@
+{
+  "app": "${appid}",
+  "scope": "ALL",
+  "desktop": {
+    "js": ["https://localhost:8080/js/app.js"],
+    "css": []
+  },
+  "mobile": {
+    "js": [],
+    "css": []
+  }
+}

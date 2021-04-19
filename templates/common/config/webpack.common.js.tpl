@@ -1,6 +1,7 @@
 const { resolve } = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const webpack = require('webpack')
 {{#if typescript}}
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 {{/if}}
@@ -9,7 +10,11 @@ const { VueLoaderPlugin } = require('vue-loader')
 {{/if}}
 
 const cssLoaders = (preNumber) => [
+  {{#if plugin}}
+  MiniCssExtractPlugin.loader,
+  {{else}}
   isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+  {{/if}}
   {
     loader: 'css-loader',
     options: {
@@ -41,24 +46,46 @@ const cssLoaders = (preNumber) => [
 ]
 
 module.exports = {
+  {{#if plugin}}
+  entry: {
+    desktop: resolve(__dirname, '../src/desktop{{suffix}}'),
+    config: resolve(__dirname, '../src/config{{suffix}}'),
+  },
+  {{else}}
   target: isDev ? 'web' : 'browserslist',
   entry: {
     app: resolve(__dirname, '../src/index{{suffix}}'),
   },
+  {{/if}}
   output: {
-    filename: `js/[name]${isDev ? '' : '.[contenthash:8]'}.js`,
-    path: resolve(__dirname, '../dist'),
+    filename: `js/[name]{{#if plugin}}{{else}}${isDev ? '' : '.[contenthash:8]'}{{/if}}.js`,
+    path: resolve(__dirname, '../{{#if plugin}}plugin/{{/if}}dist'),
   },
   resolve: {
     extensions: [{{#each extensions}}'{{this}}', {{/each}}'.json'],
   },
-  {{#if react}}
-  // externals: {
-  //   react: 'React',
-  //   'react-dom': 'ReactDOM',
-  // },
+  externals: {
+  {{#if plugin}}
+    {{#if react}}
+     react: 'React',
+     'react-dom': 'ReactDOM',
+    {{else if vue}}
+     vue: 'Vue',
+    {{/if}}
   {{/if}}
+  },
   plugins: [
+    new webpack.DefinePlugin({
+      process: {
+        env: {},
+      },
+    }),
+  {{#if plugin}}
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[name].css',
+    }),
+  {{/if}}
   {{#if typescript}}
     new ForkTsCheckerWebpackPlugin({
       typescript: {
