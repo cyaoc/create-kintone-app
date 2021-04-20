@@ -3,3 +3,6 @@
 /dist
 .*.js
 *.json
+{{#if plugin}}
+plugin/dist
+{{/if}}

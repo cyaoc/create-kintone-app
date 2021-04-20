@@ -9,7 +9,7 @@
     "format": "prettier --write src",
     "lint": "eslint --fix -c .eslintrc.js --ext {{#each extensions}}{{this}}{{#if @last}}{{else}},{{/if}}{{/each}}{{#if vue}},.vue{{/if}} src && stylelint --config .stylelintrc.js src/**/*.{{#if style.less}}{css,less{{else if style.scss}}{css{{else}}{{#if vue}}{css,vue}{{else}}css{{/if}}{{/if}}{{#if style.scss}},scss{{#if vue}},vue{{/if~}}}{{else if style.less}}{{#if vue}},vue{{/if~}}}{{/if}}",
     "upload": "{{#if plugin}}kintone-plugin-uploader dist/{{name}}.zip --base-url ${sub-domain}.cybozu.cn --username ${username} --password ${password} --watch{{else}}kintone-customize-uploader --base-url ${sub-domain}.cybozu.cn --username ${username} --password ${password} customize-manifest.json{{/if}}",
-    "start": "{{#if plugin}}{{else}}npm run upload && {{/if}}cross-env NODE_ENV=development webpack {{#if plugin}}{{else}}serve {{/if}}--config ./config/webpack.dev.js{{#if plugin}} & (wait-on plugin/dist/ && npm run gen && kintone-plugin-packer --watch --ppk plugin/private.ppk plugin --out dist/{{name}}.zip) & (wait-on dist/{{name}}.zip && npm run upload){{/if}}",
+    "start": "{{#if plugin}}node bin/clean.js && concurrently \"{{else}}npm run upload && {{/if}}cross-env NODE_ENV=development webpack {{#if plugin}}{{else}}serve {{/if}}--config ./config/webpack.dev.js{{#if plugin}}\" \"wait-on plugin/dist/ && npm run gen && kintone-plugin-packer --watch --ppk plugin/private.ppk plugin --out dist/{{name}}.zip\" \"wait-on dist/{{name}}.zip && npm run upload\"{{/if}}",
     "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js{{#if plugin}} && npm run gen && kintone-plugin-packer --ppk plugin/private.ppk plugin --out dist/{{name}}.zip{{/if}}"
   },
   "keywords": [
@@ -23,6 +23,8 @@
     "node-rsa": "^1.1.1",
     "@kintone/plugin-packer": "^4.0.3",
     "@kintone/plugin-uploader": "^4.3.0",
+    "concurrently": "^6.0.2",
+    "fs-extra": "^9.1.0",
     "wait-on": "^5.3.0",
     {{else}}
     "@kintone/customize-uploader": "^3.1.12",

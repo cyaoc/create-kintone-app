@@ -60,7 +60,7 @@ const compile = (meta, file) => {
   const result = handlebars.compile(content)(meta)
   fs.writeFileSync(file, result)
   let target = file.split('.').slice(0, -1).join('.')
-  path.extname(target) === '' && (target += meta.suffix)
+  path.extname(target) === '' && !path.basename(target).startsWith('.') && (target += meta.suffix)
   fs.renameSync(file, target)
 }
 
