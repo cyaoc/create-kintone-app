@@ -106,6 +106,14 @@ module.exports = {
         exclude: /node_modules/,
       },
       {{#if vue}}
+      {{#if typescript}}
+      {
+        test: /.ts$/,
+        loader: 'ts-loader',
+        options: { appendTsSuffixTo: [/\.vue$/] },
+        exclude: /node_modules/,
+      },
+      {{/if}}
       {
         test: /.vue$/,
         use: 'vue-loader',

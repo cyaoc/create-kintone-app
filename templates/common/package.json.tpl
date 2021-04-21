@@ -52,6 +52,9 @@
     "@babel/eslint-parser": "^7.12.1",
     {{/if}}
     {{#if vue}}
+    {{#if typescript}}
+    "ts-loader": "^9.0.0",
+    {{/if}}
     {{#if vue2}}
     "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.12",
