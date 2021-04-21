@@ -29,6 +29,7 @@
     {{else}}
     "@kintone/customize-uploader": "^3.1.12",
     "devcert": "^1.1.3",
+    "style-loader": "^2.0.0",
     "webpack-dev-server": "^3.11.1",
     {{/if}}
     {{#if react}}
@@ -87,7 +88,6 @@
     "postcss-loader": "^4.1.0",
     "postcss-normalize": "^9.0.0",
     "postcss-preset-env": "^6.7.0",
-    "style-loader": "^2.0.0",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-rational-order": "^0.1.2",
