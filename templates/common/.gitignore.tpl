@@ -3,9 +3,13 @@
 .AppleDouble
 .LSOverride
 
+{{#if plugin}}
+#plugin
+plugin/dist
+
+{{/if}}
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*

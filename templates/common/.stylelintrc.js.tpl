@@ -41,5 +41,5 @@ module.exports = {
     'selector-no-vendor-prefix': true,
     'no-descending-specificity': null,
   },
-  ignoreFiles: ['node_modules/**/*', 'dist/**/*'],
+  ignoreFiles: ['node_modules/**/*', 'dist/**/*'{{#if plugin}}, 'plugin/dist/**/*'{{/if}}],
 }

@@ -6,10 +6,11 @@
     "allowJs": true,
     {{#if react}}
     "jsx": "react",
-    "isolatedModules": true,
+    {{else}}
+    "jsx": "preserve",
     {{/if}}
+    "isolatedModules": true,
     "declaration": true,
-    "noEmit": true,
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
@@ -27,5 +28,5 @@
   },
   "files": ["./node_modules/@kintone/dts-gen/kintone.d.ts"],
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules"{{#if plugin}}, "plugin/dist"{{/if}}]
 }

@@ -12,12 +12,6 @@ import App from './App.vue'
 {{else}}
 import './app.css'
 {{/if}}
-{{#if typescript}}
-
-interface KintoneEvent {
-  record: kintone.types.SavedFields
-}
-{{/if}}
 {{#if react}}
 
 const App = () => (
@@ -31,7 +25,7 @@ kintone.events.on('app.record.index.show', (event{{#if typescript}}: KintoneEven
 {{#if react}}
   ReactDOM.render(<App />, kintone.app.getHeaderSpaceElement())
 {{else}}
-  const myContainer = kintone.app.getHeaderSpaceElement(){{#if typescript}} as HTMLInputElement{{/if}}
+  const myContainer = kintone.app.getHeaderSpaceElement(){{#if typescript}} as HTMLElement{{/if}}
   {{#if vue}}
   {{#if vue2}}
   Vue.config.productionTip = false

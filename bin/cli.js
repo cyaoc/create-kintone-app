@@ -19,14 +19,15 @@ program.arguments('<project-directory>').action(async (projectName) => {
         const answers = await inquirer.answers()
         const spinner = ora(`Creating a new kintone app in ${project.path}.${os.EOL}`)
         spinner.start()
+        const onptions = inquirer.options(answers)
         await ioutil.output(project.path, {
           name: project.name,
-          ...inquirer.options(answers),
+          ...onptions,
         })
         let msg = `${success(`Now you can start project with`)}
   ${cmd(`cd ${project.path}`)}
   ${cmd(`npm install`)}`
-        if (answers.install) {
+        if (onptions.install) {
           const result = spawn.sync('npm', ['install'], { stdio: 'inherit', cwd: project.path })
           if (result.error) {
             throw result.error
@@ -37,11 +38,22 @@ program.arguments('<project-directory>').action(async (projectName) => {
         }
         spinner.succeed(success(`Success! Created ${project.name} at ${project.path}.`))
         spinner.info(msg)
-        spinner.info(`${success(`Inside that directory, you can run several commands:`)}
+        const cmd_upload = `
+  ${cmd(`npm run upload`)}
+  Please enter your domain name, username, password${
+    onptions.plugin ? '' : ', and appid in the customize-manifest.json file.'
+  }`
 
+        const cmd_start = `
   ${cmd(`npm start`)}
-  Starts the development server.
-  Please set ${success(`https://localhost:8080/js/app.js`)} to kintone's custom js field
+  ${
+    onptions.plugin
+      ? 'Turns on watch mode, automatically package and upload'
+      : 'Uploads the js file and starts the development server.'
+  }`
+        spinner.info(`${success(`Inside that directory, you can run several commands:`)}
+  ${cmd_upload}
+  ${cmd_start}
 
   ${cmd(`npm run build`)}
   Builds optimized code under the dist directory.

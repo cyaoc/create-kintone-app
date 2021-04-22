@@ -2,8 +2,10 @@ const fs = require('fs')
 const ncp = require('ncp')
 const path = require('path')
 const handlebars = require('handlebars')
+const recursive = require('recursive-readdir')
 const util = require('util')
-const templateDir = path.resolve(__dirname, '../templates')
+
+const baseTemplateDir = path.resolve(__dirname, '../templates')
 
 const validate = (input) => {
   if (/[\\/:*?"<>|]/im.test(input)) {
@@ -53,53 +55,55 @@ const isEmptyDir = (path) => {
   }
 }
 
-const compile = (meta, file, dir) => {
+const compile = (meta, file) => {
   const content = fs.readFileSync(file).toString()
   const result = handlebars.compile(content)(meta)
-  let target = file.replace(templateDir, dir).split('.').slice(0, -1).join('.')
-  if (file === path.join(templateDir, 'src', 'index.tpl')) {
-    target += meta.suffix
-  }
-  fs.writeFileSync(target, result)
+  fs.writeFileSync(file, result)
+  let target = file.split('.').slice(0, -1).join('.')
+  path.extname(target) === '' && !path.basename(target).startsWith('.') && (target += meta.suffix)
+  fs.renameSync(file, target)
 }
 
-const ignore = (options) => {
+const ignore = (options, commonDir) => {
   const set = new Set()
-  if (options.vue) {
-    set.add(path.join(templateDir, 'src', 'app.css'))
-  } else {
-    set.add(path.join(templateDir, 'src', 'App.vue.tpl'))
-    set.add(path.join(templateDir, 'src', 'shims-vue.d.ts'))
+  if (!options.vue) {
+    if (options.plugin) {
+      set.add(path.join(baseTemplateDir, 'plugin', 'src', 'Desktop.vue.tpl'))
+      set.add(path.join(baseTemplateDir, 'plugin', 'src', 'Config.vue.tpl'))
+    } else {
+      set.add(path.join(baseTemplateDir, 'app', 'src', 'App.vue.tpl'))
+    }
+    set.add(path.join(commonDir, 'src', 'shims-vue.d.ts'))
   }
   if (!options.typescript) {
     set
-      .add(path.join(templateDir, 'tsconfig.json.tpl'))
-      .add(path.join(templateDir, 'src', 'fields.d.ts'))
-      .add(path.join(templateDir, 'src', 'shims-vue.d.ts'))
-  } else {
-    set.add(path.join(templateDir, 'jsconfig.json'))
+      .add(path.join(commonDir, 'tsconfig.json.tpl'))
+      .add(path.join(commonDir, 'src', 'fields.d.ts.tpl'))
+      .add(path.join(commonDir, 'src', 'shims-vue.d.ts'))
   }
   return set
 }
 
-const output = (filePath, options) => {
-  const ignoreList = ignore(options)
+const output = async (targetDir, options) => {
+  const sourceDir = path.join(baseTemplateDir, options.plugin ? 'plugin' : 'app')
+  const commonDir = path.join(baseTemplateDir, 'common')
+  const ignoreList = ignore(options, commonDir)
   const filter = {
     filter: (source) => {
-      if (!fs.lstatSync(source).isDirectory()) {
-        if (ignoreList.has(source)) {
-          return false
-        }
-        if (path.extname(source) === '.tpl') {
-          compile(options, source, filePath)
-          return false
-        }
-      }
-      return true
+      return !(fs.lstatSync(source).isFile && ignoreList.has(source))
     },
   }
   const npcp = util.promisify(ncp)
-  return npcp(templateDir, filePath, filter)
+  await npcp(commonDir, targetDir, filter)
+  await npcp(sourceDir, targetDir, filter)
+  const files = await recursive(targetDir, [
+    (file, stats) => {
+      return !stats.isDirectory() && path.extname(file) != '.tpl'
+    },
+  ])
+  files.forEach((file) => {
+    compile(options, file)
+  })
 }
 
 module.exports = Object.freeze({

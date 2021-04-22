@@ -16,16 +16,6 @@ export default {
 </script>
 
 <style>
-@import 'normalize.css/opinionated.css';
-
-.app {
-  flex: 1;
-  font-family: system-ui;
-  text-align: center;
-  background-color: #12345678;
-}
-
-::placeholder {
-  color: rgb(128, 128, 128);
-}
+@import "normalize.css";
+@import 'app.css';
 </style>

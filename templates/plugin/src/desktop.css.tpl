@@ -1,0 +1,17 @@
+{{#if vue}}
+{{else}}
+@import 'normalize.css';
+
+{{/if}}
+.plugin-space-heading {
+  margin: 0.8rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.plugin-space-message {
+  margin: 0.8rem;
+  margin-top: 0;
+  font-size: 1.2em;
+  text-align: center;
+}
