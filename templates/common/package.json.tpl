@@ -127,7 +127,7 @@
     "react-dom": "^17.0.1",
     {{/if}}
     {{#if vue}}
-    "vue": "^{{#if vue2}}2.6.12{{else}}3.0.5{{/if}}",
+    "vue": "^{{#if vue2}}2.6.12{{else}}3.0.11{{/if}}",
     {{/if}}
     "@babel/runtime-corejs3": "^7.12.5"
   }
