@@ -46,5 +46,5 @@ export default {{#if vue2}}Vue.extend{{else}}defineComponent{{/if}}({
 
 <style>
 @import 'normalize.css/opinionated.css';
-@import 'config.css';
+@import '../css/config.css';
 </style>

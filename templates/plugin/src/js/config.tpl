@@ -10,7 +10,7 @@ import Config from './Config.vue'
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 {{/if}}
-import './config.css'
+import '../css/config.css'
 {{/if}}
 
 {{#if react}}

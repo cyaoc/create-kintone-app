@@ -70,6 +70,11 @@ const questions = [
   },
   {
     type: 'confirm',
+    message: 'Do you need to use eslint and stylint to catch probable bugs?',
+    name: 'lint',
+  },
+  {
+    type: 'confirm',
     message: 'Would you like to install dependencies now with npm?',
     name: 'install',
   },

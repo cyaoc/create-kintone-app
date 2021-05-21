@@ -10,6 +10,21 @@ You can use the following commands to create a project
 npx create-kintone-app ${name}
 ```
 
+## Features
+
+- [x] kintone plugin development
+- [x] kintone custom app development
+- [ ] kintone portal development
+- [x] automatic compilation & upload
+- [x] support ie11
+- [x] automatic code correction
+- [x] support react
+- [x] support vue2
+- [x] support vue3
+- [x] support typescript
+- [x] support less
+- [x] support scss
+
 ## LICENSE
 
 MIT License

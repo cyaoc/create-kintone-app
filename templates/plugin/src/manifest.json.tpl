@@ -8,13 +8,13 @@
       "https://unpkg.com/react@17/umd/react.production.min.js",
       "https://unpkg.com/react-dom@17/umd/react-dom.production.min.js",
       {{else if vue}}
-      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.12{{else}}3.0.5{{/if}}",
+      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.12{{else}}3.0.11{{/if}}",
       {{/if}}
-      "dist/js/desktop.js"
+      "js/desktop.js"
     ],
     "css": [
       "css/51-modern-default.css",
-      "dist/css/desktop.css"
+      "css/desktop.css"
     ]
   },
   "icon": "image/icon.png",
@@ -25,13 +25,13 @@
       "https://unpkg.com/react@17/umd/react.production.min.js",
       "https://unpkg.com/react-dom@17/umd/react-dom.production.min.js",
       {{else if vue}}
-      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.12{{else}}3.0.5{{/if}}",
+      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.12{{else}}3.0.11{{/if}}",
       {{/if}}
-      "dist/js/config.js"
+      "js/config.js"
     ],
     "css": [
       "css/51-modern-default.css",
-      "dist/css/config.css"
+      "css/config.css"
     ],
     "required_params": [
       "message"

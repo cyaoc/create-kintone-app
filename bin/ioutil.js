@@ -64,33 +64,26 @@ const compile = (meta, file) => {
   fs.renameSync(file, target)
 }
 
-const ignore = (options, commonDir) => {
-  const set = new Set()
-  if (!options.vue) {
-    if (options.plugin) {
-      set.add(path.join(baseTemplateDir, 'plugin', 'src', 'Desktop.vue.tpl'))
-      set.add(path.join(baseTemplateDir, 'plugin', 'src', 'Config.vue.tpl'))
-    } else {
-      set.add(path.join(baseTemplateDir, 'app', 'src', 'App.vue.tpl'))
-    }
-    set.add(path.join(commonDir, 'src', 'shims-vue.d.ts'))
-  }
-  if (!options.typescript) {
-    set
-      .add(path.join(commonDir, 'tsconfig.json.tpl'))
-      .add(path.join(commonDir, 'src', 'fields.d.ts.tpl'))
-      .add(path.join(commonDir, 'src', 'shims-vue.d.ts'))
-  }
-  return set
+const ignore = {
+  vue: ['Desktop.vue.tpl', 'Config.vue.tpl', 'App.vue.tpl', 'shims-vue.d.ts'],
+  ts: ['tsconfig.json.tpl', 'fields.d.ts.tpl', 'shims-vue.d.ts'],
+  lint: ['.eslintignore.tpl', '.eslintrc.js.tpl', '.stylelintrc.js.tpl'],
+}
+
+const getIgnorelist = (options) => {
+  let arr = options.lint ? [] : ignore.lint
+  if (!options.vue) arr = arr.concat(ignore.vue)
+  if (!options.typescript) arr = arr.concat(ignore.ts)
+  return new Set(arr)
 }
 
 const output = async (targetDir, options) => {
   const sourceDir = path.join(baseTemplateDir, options.plugin ? 'plugin' : 'app')
   const commonDir = path.join(baseTemplateDir, 'common')
-  const ignoreList = ignore(options, commonDir)
+  const ignoreList = getIgnorelist(options)
   const filter = {
     filter: (source) => {
-      return !(fs.lstatSync(source).isFile && ignoreList.has(source))
+      return !(fs.lstatSync(source).isFile && ignoreList.has(path.basename(source)))
     },
   }
   const npcp = util.promisify(ncp)
