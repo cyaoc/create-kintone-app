@@ -57,7 +57,7 @@ const load = async (source) => {
     },
   {{/if}}
   ]
-  const env = envfile.parse(fs.readFileSync(source))
+  const env = fs.existsSync(source) ? envfile.parse(fs.readFileSync(source)) : {}
   for (let i = questions.length - 1; i >= 0; i -= 1) {
     if (env[questions[i].name]) questions.splice(i, 1)
   }
