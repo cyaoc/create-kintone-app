@@ -1,13 +1,9 @@
 /node_modules
 /config
 /dist
+/scripts
 .*.js
 *.json
-{{#if plugin}}
-plugin/dist
-{{/if}}
-{{#if vue}}
 {{#if typescript}}
-src/*.d.ts
-{{/if}}
+*.d.ts
 {{/if}}

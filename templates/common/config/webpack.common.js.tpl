@@ -2,6 +2,9 @@ const { resolve } = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
+{{#if plugin}}
+const CopyPlugin = require('copy-webpack-plugin')
+{{/if}}
 {{#if typescript}}
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 {{/if}}
@@ -45,21 +48,24 @@ const cssLoaders = (preNumber) => [
   },
 ]
 
+const source = resolve(__dirname, '../src')
+const output = resolve(__dirname, '../dist')
+
 module.exports = {
   {{#if plugin}}
   entry: {
-    desktop: resolve(__dirname, '../src/desktop{{suffix}}'),
-    config: resolve(__dirname, '../src/config{{suffix}}'),
+    desktop: resolve(source, 'js/desktop{{suffix}}'),
+    config: resolve(source, 'js/config{{suffix}}'),
   },
   {{else}}
-  target: isDev ? 'web' : 'browserslist',
   entry: {
-    app: resolve(__dirname, '../src/index{{suffix}}'),
+    app: resolve(source, 'index{{suffix}}'),
   },
   {{/if}}
   output: {
     filename: `js/[name]{{#if plugin}}{{else}}${isDev ? '' : '.[contenthash:8]'}{{/if}}.js`,
-    path: resolve(__dirname, '../{{#if plugin}}plugin/{{/if}}dist'),
+    path: output,
+    clean: true,
   },
   resolve: {
     extensions: [{{#each extensions}}'{{this}}', {{/each}}'.json'],
@@ -81,6 +87,9 @@ module.exports = {
       },
     }),
   {{#if plugin}}
+    new CopyPlugin({
+      patterns: [{ from: source, to: output }],
+    }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
       chunkFilename: 'css/[name].css',

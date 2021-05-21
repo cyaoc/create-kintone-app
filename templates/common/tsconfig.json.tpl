@@ -28,5 +28,5 @@
   },
   "files": ["./node_modules/@kintone/dts-gen/kintone.d.ts"],
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"{{#if plugin}}, "plugin/dist"{{/if}}]
+  "exclude": ["dist", "node_modules"]
 }

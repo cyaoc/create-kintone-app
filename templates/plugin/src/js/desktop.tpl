@@ -10,7 +10,7 @@ import { createApp } from 'vue'
 {{/if}}
 import Desktop from './Desktop.vue'
 {{else}}
-import './desktop.css'
+import '../css/desktop.css'
 {{/if}}
 {{#if react}}
 

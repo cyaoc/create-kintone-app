@@ -18,11 +18,11 @@
   {{#if style.scss}}
   "scss.validate": false,
   {{/if}}
+  {{#if lint}}
   "editor.codeActionsOnSave": {
-    {{#if style.css}}
     "source.fixAll.stylelint": true,
-    {{/if}}
     "source.fixAll.eslint": true
   },
+  {{/if}}
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

@@ -19,5 +19,5 @@ export default {
 
 <style>
 @import 'normalize.css/opinionated.css';
-@import 'desktop.css';
+@import '../css/desktop.css';
 </style>
