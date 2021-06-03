@@ -145,7 +145,7 @@ module.exports = class Client {
   async customize(appid, callback) {
     const settings = await this.instance.post('/k/api/js/get.json', { app: appid })
     const jsFiles = callback(settings.data.result.scripts)
-    if (jsFiles) {
+    if (jsFiles && jsFiles.length > 0) {
       const app = await this.instance.get(`/k/v1/app.json?id=${appid}`)
       const body = {
         jsScope: settings.data.result.scope,
