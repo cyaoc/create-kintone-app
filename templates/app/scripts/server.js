@@ -1,7 +1,6 @@
 const webpack = require('webpack')
 const devcert = require('devcert')
 const WebpackDevServer = require('webpack-dev-server')
-const ip = require('ip')
 const configuration = require('../config/webpack.dev')
 const envfile = require('./env')
 const Client = require('./client')
@@ -9,6 +8,7 @@ const config = require('./config')
 const logger = require('./logger')
 
 const devServer = {
+  port: config.port,
   stats: 'errors-only',
   clientLogLevel: 'silent',
   compress: true,
@@ -58,7 +58,7 @@ const main = async () => {
   const compiler = webpack(configuration)
 
   const ssl = await setCert()
-  const host = ssl ? config.domain : ip.address()
+  const host = ssl ? config.domain : 'localhost'
   devServer.host = host
 
   const env = await envfile.load(config.envfile)
@@ -67,11 +67,11 @@ const main = async () => {
   const tasks = getTasks(env[config.envAppID])
 
   const server = new WebpackDevServer(compiler, devServer)
-  server.listen(config.port, host, () => {
-    const port = config.port === 443 ? '' : `:${config.port}`
+  server.listen(devServer.port, host, () => {
+    const port = devServer.port === 443 ? '' : `:${devServer.port}`
     if (!ssl) {
       logger.warn('As a non-secure certificate is used, please verify before debugging.')
-      logger.info(`Please click -> https://${host}${port}/`)
+      logger.warn(`Please click -> https://${host}${port}/`)
     }
 
     Promise.all(

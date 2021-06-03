@@ -15,6 +15,7 @@ const handleError = (error) => {
 }
 {{#if plugin}}
 {{else}}
+
 const getFileKeys = (template, key) => {
   if (!template.has(key)) template.set(key, { jsType: key, fileKeys: [] })
   return template.get(key).fileKeys
