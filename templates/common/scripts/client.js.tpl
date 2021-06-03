@@ -3,7 +3,6 @@ const FormData = require('form-data')
 {{#if plugin}}
 {{else}}
 const path = require('path')
-const recursive = require('recursive-readdir')
 const fs = require('fs')
 {{/if}}
 const logger = require('./logger')
@@ -16,14 +15,6 @@ const handleError = (error) => {
 }
 {{#if plugin}}
 {{else}}
-const getFiles = (dir) => {
-  return recursive(dir, [
-    (file, stats) => {
-      return stats.isFile() && path.extname(file) !== '.js' && path.extname(file) !== '.css'
-    },
-  ])
-}
-
 const getFileKeys = (template, key) => {
   if (!template.has(key)) template.set(key, { jsType: key, fileKeys: [] })
   return template.get(key).fileKeys
@@ -99,7 +90,7 @@ module.exports = class Client {
   async customizeLinks(appid, urls, cover) {
     try {
       const arr = urls.map((url) => {
-        return { types: cover, contentUrl: url }
+        return { types: new Set(cover), contentUrl: url }
       })
       const cb = (scripts) => {
         const template = new Map()
@@ -124,9 +115,9 @@ module.exports = class Client {
     }
   }
 
-  async customizeFiles(appid, targetDir, cover) {
+  async customizeFiles(appid, files, cover) {
     try {
-      const arr = await this.upload(await getFiles(targetDir), cover)
+      const arr = await this.upload(files, cover)
       const cb = (scripts) => {
         const template = new Map()
         scripts.forEach((file) => {
@@ -165,7 +156,7 @@ module.exports = class Client {
       const result = await this.instance.post('/k/api/dev/app/deploy.json', {
         app: appid,
       })
-      if (result.data.success) return logger.info('The configuration file has been updated!')
+      if (result.data.success) return logger.info(`The configuration has been updated to ${app.data.name}`)
     }
     return logger.info('No need to update!')
   }

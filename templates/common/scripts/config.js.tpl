@@ -32,6 +32,7 @@ module.exports = Object.freeze({
   envAppID: 'APPID',
   outputJS: outputJS(),
   domain: 'localhost',
-  customize: new Set(['desktop', 'mobile'].map((el) => el.toUpperCase())),
+  port: 8080,
+  customize: ['desktop', 'mobile'].map((el) => el.toUpperCase()),
   {{/if}}
 })

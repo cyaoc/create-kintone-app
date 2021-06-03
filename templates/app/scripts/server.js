@@ -9,7 +9,6 @@ const config = require('./config')
 const logger = require('./logger')
 
 const devServer = {
-  port: 443,
   stats: 'errors-only',
   clientLogLevel: 'silent',
   compress: true,
@@ -30,28 +29,62 @@ const setCert = async () => {
   }
 }
 
+const includes = (arr, file) => (Array.isArray(arr) ? arr.includes(file) : arr === file)
+
+const transform = (obj) => {
+  if (Number(obj)) return { app: obj }
+  return {
+    app: obj.app,
+    filter: (file) => includes(obj.files, file),
+  }
+}
+
+const getTasks = (id) => {
+  if (Number(id)) return [{ app: id }]
+  const objects = JSON.parse(id)
+  if (typeof objects === 'object') {
+    if (Array.isArray(objects)) return objects.map((obj) => transform(obj))
+    return [transform(objects)]
+  }
+  return []
+}
+
 const main = async () => {
   if (!devServer.https) throw new Error('The URL must start with "https://".')
   logger.info('Start dev server.......')
   // https://github.com/webpack/webpack-dev-server/issues/2758
   configuration.target = 'web'
+
   const compiler = webpack(configuration)
 
   const ssl = await setCert()
   const host = ssl ? config.domain : ip.address()
+  devServer.host = host
 
   const env = await envfile.load(config.envfile)
   const client = new Client(env[config.envBaseURL], env[config.envUserName], env[config.envPassword])
 
+  const tasks = getTasks(env[config.envAppID])
+
   const server = new WebpackDevServer(compiler, devServer)
-  server.listen(devServer.port, devServer.host, async () => {
-    const port = devServer.port === 443 ? '' : `:${devServer.port}`
-    const urls = config.outputJS.map((file) => `https://${host}${port}/js/${file}.js`)
-    await client.customizeLinks(env[config.envAppID], urls, config.customize)
+  server.listen(config.port, host, () => {
+    const port = config.port === 443 ? '' : `:${config.port}`
     if (!ssl) {
       logger.warn('As a non-secure certificate is used, please verify before debugging.')
       logger.info(`Please click -> https://${host}${port}/`)
     }
+
+    Promise.all(
+      tasks.map((task) =>
+        client.customizeLinks(
+          task.app,
+          config.outputJS
+            .filter((el) => (task.filter ? task.filter(el) : true))
+            .map((file) => `https://${host}${port}/js/${file}.js`),
+          config.customize,
+        ),
+      ),
+    )
   })
 }
 
