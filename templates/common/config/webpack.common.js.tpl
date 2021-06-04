@@ -98,6 +98,9 @@ module.exports = {
   {{#if typescript}}
     new ForkTsCheckerWebpackPlugin({
       typescript: {
+        {{#if vue}}
+        vue: true,
+        {{/if}}
         configFile: resolve(__dirname, '../tsconfig.json'),
       },
     }),
@@ -119,7 +122,10 @@ module.exports = {
       {
         test: /.ts$/,
         loader: 'ts-loader',
-        options: { appendTsSuffixTo: [/\.vue$/] },
+        options: {
+          transpileOnly: true,
+          appendTsSuffixTo: [/\.vue$/],
+        },
         exclude: /node_modules/,
       },
       {{/if}}

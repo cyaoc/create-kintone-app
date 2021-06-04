@@ -16,6 +16,6 @@ export default {
 </script>
 
 <style>
-@import "normalize.css";
+@import 'normalize.css';
 @import 'app.css';
 </style>
