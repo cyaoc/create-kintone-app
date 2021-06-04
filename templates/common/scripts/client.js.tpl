@@ -90,6 +90,10 @@ module.exports = class Client {
 
   async customizeLinks(appid, urls, cover) {
     try {
+      if (urls.length === 0) {
+        logger.warn('URL not found')
+        return
+      }
       const arr = urls.map((url) => {
         return { types: new Set(cover), contentUrl: url }
       })
@@ -118,6 +122,10 @@ module.exports = class Client {
 
   async customizeFiles(appid, files, cover) {
     try {
+      if (files.length === 0) {
+        logger.warn('File not found')
+        return
+      }
       const arr = await this.upload(files, cover)
       const cb = (scripts) => {
         const template = new Map()
@@ -145,7 +153,7 @@ module.exports = class Client {
   async customize(appid, callback) {
     const settings = await this.instance.post('/k/api/js/get.json', { app: appid })
     const jsFiles = callback(settings.data.result.scripts)
-    if (jsFiles && jsFiles.length > 0) {
+    if (jsFiles) {
       const app = await this.instance.get(`/k/v1/app.json?id=${appid}`)
       const body = {
         jsScope: settings.data.result.scope,

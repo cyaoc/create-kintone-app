@@ -8,6 +8,7 @@ const config = require('./config')
 const logger = require('./logger')
 
 const devServer = {
+  host: 'localhost',
   port: config.port,
   stats: 'errors-only',
   clientLogLevel: 'silent',
@@ -21,6 +22,7 @@ const setCert = async () => {
     const { key, cert } = await devcert.certificateFor(config.domain)
     devServer.key = key
     devServer.cert = cert
+    devServer.host = config.domain
     return true
   } catch (err) {
     if (err.message) logger.error(err.message)
@@ -33,6 +35,7 @@ const includes = (arr, file) => (Array.isArray(arr) ? arr.includes(file) : arr =
 
 const transform = (obj) => {
   if (Number(obj)) return { app: obj }
+  if (!Number(obj.app)) throw new Error('The wrong parameter type was entered')
   return {
     app: obj.app,
     filter: (file) => includes(obj.files, file),
@@ -57,9 +60,7 @@ const main = async () => {
 
   const compiler = webpack(configuration)
 
-  const ssl = await setCert()
-  const host = ssl ? config.domain : 'localhost'
-  devServer.host = host
+  const secure = await setCert()
 
   const env = await envfile.load(config.envfile)
   const client = new Client(env[config.envBaseURL], env[config.envUserName], env[config.envPassword])
@@ -67,11 +68,11 @@ const main = async () => {
   const tasks = getTasks(env[config.envAppID])
 
   const server = new WebpackDevServer(compiler, devServer)
-  server.listen(devServer.port, host, () => {
+  server.listen(devServer.port, devServer.host, () => {
     const port = devServer.port === 443 ? '' : `:${devServer.port}`
-    if (!ssl) {
+    if (!secure) {
       logger.warn('As a non-secure certificate is used, please verify before debugging.')
-      logger.warn(`Please click -> https://${host}${port}/`)
+      logger.warn(`Please click -> https://${devServer.host}${port}/`)
     }
 
     Promise.all(
@@ -80,7 +81,7 @@ const main = async () => {
           task.app,
           config.outputJS
             .filter((el) => (task.filter ? task.filter(el) : true))
-            .map((file) => `https://${host}${port}/js/${file}.js`),
+            .map((file) => `https://${devServer.host}${port}/js/${file}.js`),
           config.customize,
         ),
       ),

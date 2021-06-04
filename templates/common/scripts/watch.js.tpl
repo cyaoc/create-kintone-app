@@ -30,7 +30,7 @@ const transform = (obj) => {
 const getTask = (id) => {
   if (Number(id)) return { app: id, ignore }
   const object = JSON.parse(id)
-  if (typeof object === 'object' && !Array.isArray(object)) return transform(object)
+  if (typeof object === 'object' && !Array.isArray(object) && Number(object.app)) return transform(object)
   throw new Error('The wrong parameter type was entered')
 }
 
