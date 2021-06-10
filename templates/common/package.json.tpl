@@ -77,6 +77,7 @@
     "@cybozu/eslint-config": "^14.0.0",
     "eslint": "^7.28.0",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
     "stylelint": "^13.13.1",
