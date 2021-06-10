@@ -1,6 +1,6 @@
 {
   "name": "create-kintone-app",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A CLI tool for creating kintone app development templates",
   "bin": {
     "create-kintone-app": "./bin/cli.js"
@@ -15,6 +15,9 @@
   ],
   "author": "cyao",
   "license": "MIT",
+  "engines": {
+    "node": ">=10.24.1"
+  },
   "devDependencies": {
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",

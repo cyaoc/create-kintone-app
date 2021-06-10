@@ -173,11 +173,11 @@ module.exports = {
       {{/if}}
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
-        use: 'url-loader',
+        type: 'asset/inline',
       },
       {
         test: /\.(ttf|woff|woff2|eot|otf)$/,
-        use: 'url-loader',
+        type: 'asset/inline',
       },
     ],
   },

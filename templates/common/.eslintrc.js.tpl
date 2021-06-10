@@ -31,13 +31,6 @@ module.exports = {
     {{/if}}
     {{#if typescript}}
     '@cybozu/eslint-config/presets/typescript-prettier',
-    'prettier/@typescript-eslint',
-    {{/if}}
-    {{#if react}}
-    'prettier/react',
-    {{/if}}
-    {{#if vue}}
-    'prettier/vue',
     {{/if}}
     'plugin:prettier/recommended',
   ],

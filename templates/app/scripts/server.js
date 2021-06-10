@@ -10,6 +10,7 @@ const logger = require('./logger')
 const devServer = {
   host: 'localhost',
   port: config.port,
+  contentBase: config.outputDir,
   stats: 'errors-only',
   clientLogLevel: 'silent',
   compress: true,
@@ -75,13 +76,15 @@ const main = async () => {
       logger.warn(`Please click -> https://${devServer.host}${port}/`)
     }
 
+    const url = new URL(configuration.output.filename, `https://${devServer.host}${port}`).href
+
     Promise.all(
       tasks.map((task) =>
         client.customizeLinks(
           task.app,
           config.outputJS
             .filter((el) => (task.filter ? task.filter(el) : true))
-            .map((file) => `https://${devServer.host}${port}/js/${file}.js`),
+            .map((file) => url.replace('[name]', file)),
           config.customize,
         ),
       ),

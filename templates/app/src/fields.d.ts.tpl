@@ -26,3 +26,67 @@ declare namespace kintone.types {
 interface KintoneEvent {
   record: kintone.types.SavedFields
 }
+{{#if vue}}
+
+declare module '*.vue' {
+  import { ComponentOptions } from 'vue'
+
+  const componentOptions: ComponentOptions
+  export default componentOptions
+}
+{{/if}}
+
+declare module '*.bmp' {
+  const path: string
+  export default path
+}
+
+declare module '*.gif' {
+  const path: string
+  export default path
+}
+
+declare module '*.jpg' {
+  const path: string
+  export default path
+}
+
+declare module '*.jpeg' {
+  const path: string
+  export default path
+}
+
+declare module '*.png' {
+  const path: string
+  export default path
+}
+
+declare module '*.svg' {
+  const path: string
+  export default path
+}
+
+declare module '*.ttf' {
+  const path: string
+  export default path
+}
+
+declare module '*.woff' {
+  const path: string
+  export default path
+}
+
+declare module '*.woff2' {
+  const path: string
+  export default path
+}
+
+declare module '*.eot' {
+  const path: string
+  export default path
+}
+
+declare module '*.otf' {
+  const path: string
+  export default path
+}
