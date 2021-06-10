@@ -8,7 +8,7 @@
       "https://unpkg.com/react@17/umd/react.production.min.js",
       "https://unpkg.com/react-dom@17/umd/react-dom.production.min.js",
       {{else if vue}}
-      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.12{{else}}3.0.11{{/if}}",
+      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.14{{else}}3.1.1{{/if}}",
       {{/if}}
       "js/desktop.js"
     ],
@@ -25,7 +25,7 @@
       "https://unpkg.com/react@17/umd/react.production.min.js",
       "https://unpkg.com/react-dom@17/umd/react-dom.production.min.js",
       {{else if vue}}
-      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.12{{else}}3.0.11{{/if}}",
+      "https://cdn.jsdelivr.net/npm/vue@{{#if vue2}}2.6.14{{else}}3.1.1{{/if}}",
       {{/if}}
       "js/config.js"
     ],

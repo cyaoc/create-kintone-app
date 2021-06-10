@@ -88,6 +88,7 @@ module.exports = Object.freeze({
     const plugin = aws.app === 2
     const react = aws.library === 2
     const vue = aws.library === 3
+    const sass6 = Number.parseInt(process.version.match(/^v(\d+\.\d+)/)[1]) >= 14
     let extensions = ['.js']
     const tsex = ['.ts']
     const suffix = aws.typescript && react ? '.tsx' : aws.typescript ? '.ts' : '.js'
@@ -119,6 +120,7 @@ module.exports = Object.freeze({
       vue,
       vue2: vue && aws.vue === 2,
       vue3: vue && aws.vue === 3,
+      sass6,
       extensions,
       jsmatch: `/.${js}$/`,
       validate,

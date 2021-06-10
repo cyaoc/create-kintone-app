@@ -27,8 +27,8 @@ const check = (dirpath, dirname) => {
   const isExists = getStat(dirpath)
   if (isExists) {
     if (isExists.isDirectory()) {
-      if (!isEmptyDir(dirpath)) {
-        console.error(`The directory ${dirname} contains files, please try using a new directory name.`)
+      if (isNodeDir(dirpath)) {
+        console.error(`The directory ${dirname} contains Node.js project files, please try using a new directory name.`)
         return false
       }
     } else {
@@ -47,9 +47,9 @@ const getStat = (path) => {
   }
 }
 
-const isEmptyDir = (path) => {
+const isNodeDir = (dir) => {
   try {
-    return fs.readdirSync(path).length === 0
+    return fs.readdirSync(dir).length != 0 && fs.existsSync(path.resolve(dir, 'package.json'))
   } catch {
     return false
   }
@@ -65,8 +65,8 @@ const compile = (meta, file) => {
 }
 
 const ignore = {
-  vue: ['Desktop.vue.tpl', 'Config.vue.tpl', 'App.vue.tpl', 'shims-vue.d.ts'],
-  ts: ['tsconfig.json.tpl', 'fields.d.ts.tpl', 'shims-vue.d.ts'],
+  vue: ['Desktop.vue.tpl', 'Config.vue.tpl', 'App.vue.tpl'],
+  ts: ['tsconfig.json.tpl', 'fields.d.ts.tpl'],
   lint: ['.eslintignore.tpl', '.eslintrc.js.tpl', '.stylelintrc.js.tpl'],
 }
 

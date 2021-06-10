@@ -15,6 +15,9 @@
   ],
   "author": "cyao",
   "license": "MIT",
+  "engines": {
+    "node": ">=10.24.1"
+  },
   "devDependencies": {
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
