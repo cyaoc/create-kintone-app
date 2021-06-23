@@ -29,7 +29,9 @@ module.exports = Object.freeze({
   output: path.resolve(outputDir, zip),
   zip,
   {{else}}
+  {{#if app}}
   envAppID: 'APPID',
+  {{/if}}
   outputJS: outputJS(),
   domain: 'localhost',
   port: 8080,

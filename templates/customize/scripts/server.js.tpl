@@ -32,27 +32,6 @@ const setCert = async () => {
   }
 }
 
-const includes = (arr, file) => (Array.isArray(arr) ? arr.includes(file) : arr === file)
-
-const transform = (obj) => {
-  if (Number(obj)) return { app: obj }
-  if (!Number(obj.app)) throw new Error('The wrong parameter type was entered')
-  return {
-    app: obj.app,
-    filter: (file) => includes(obj.files, file),
-  }
-}
-
-const getTasks = (id) => {
-  if (Number(id)) return [{ app: id }]
-  const objects = JSON.parse(id)
-  if (typeof objects === 'object') {
-    if (Array.isArray(objects)) return objects.map((obj) => transform(obj))
-    return [transform(objects)]
-  }
-  return []
-}
-
 const main = async () => {
   if (!devServer.https) throw new Error('The URL must start with "https://".')
   logger.info('Start dev server.......')
@@ -66,10 +45,8 @@ const main = async () => {
   const env = await envfile.load(config.envfile)
   const client = new Client(env[config.envBaseURL], env[config.envUserName], env[config.envPassword])
 
-  const tasks = getTasks(env[config.envAppID])
-
   const server = new WebpackDevServer(compiler, devServer)
-  server.listen(devServer.port, devServer.host, () => {
+  server.listen(devServer.port, devServer.host, async () => {
     const port = devServer.port === 443 ? '' : `:${devServer.port}`
     if (!secure) {
       logger.warn('As a non-secure certificate is used, please verify before debugging.')
@@ -77,17 +54,12 @@ const main = async () => {
     }
 
     const url = new URL(configuration.output.filename, `https://${devServer.host}${port}`).href
-
-    Promise.all(
-      tasks.map((task) =>
-        client.customizeLinks(
-          task.app,
-          config.outputJS
-            .filter((el) => (task.filter ? task.filter(el) : true))
-            .map((file) => url.replace('[name]', file)),
-          config.customize,
-        ),
-      ),
+    await client.customizeLinks(
+      {{#if app}}
+      env[config.envAppID],
+      {{/if}}
+      config.outputJS.map((file) => url.replace('[name]', file)),
+      config.customize,
     )
   })
 }

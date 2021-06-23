@@ -21,11 +21,11 @@ const App = () => (
 )
 {{/if}}
 
-kintone.events.on('app.record.index.show', (event{{#if typescript}}: KintoneEvent{{/if}}) => {
+kintone.events.on('{{#if app}}app.record.index{{else if portal}}portal{{/if}}.show', (event{{#if typescript}}: KintoneEvent{{/if}}) => {
 {{#if react}}
-  ReactDOM.render(<App />, kintone.app.getHeaderSpaceElement())
+  ReactDOM.render(<App />, kintone.{{#if app}}app.getHeader{{else if portal}}portal.getContent{{/if}}SpaceElement())
 {{else}}
-  const myContainer = kintone.app.getHeaderSpaceElement(){{#if typescript}} as HTMLElement{{/if}}
+  const myContainer = kintone.{{#if app}}app.getHeader{{else if portal}}portal.getContent{{/if}}SpaceElement(){{#if typescript}} as HTMLElement{{/if}}
   {{#if vue}}
   {{#if vue2}}
   Vue.config.productionTip = false

@@ -6,10 +6,11 @@ const questions = [
   {
     type: 'list',
     message: 'What kind of development do you want to do?',
-    name: 'app',
+    name: 'type',
     choices: [
       { name: 'Custom App', value: 1 },
       { name: 'Plugin', value: 2 },
+      { name: 'Portal', value: 3 },
     ],
     default: 0,
   },
@@ -85,7 +86,9 @@ module.exports = Object.freeze({
     return inquirer.prompt(questions)
   },
   options: (aws) => {
-    const plugin = aws.app === 2
+    const app = aws.type === 1
+    const plugin = aws.type === 2
+    const portal = aws.type === 3
     const react = aws.library === 2
     const vue = aws.library === 3
     let extensions = ['.js']
@@ -110,7 +113,9 @@ module.exports = Object.freeze({
     }
     return {
       ...aws,
+      app,
       plugin,
+      portal,
       style: {
         less: aws.css.includes(1),
         scss: aws.css.includes(2),

@@ -78,7 +78,7 @@ const getIgnorelist = (options) => {
 }
 
 const output = async (targetDir, options) => {
-  const sourceDir = path.join(baseTemplateDir, options.plugin ? 'plugin' : 'app')
+  const sourceDir = path.join(baseTemplateDir, options.plugin ? 'plugin' : 'customize')
   const commonDir = path.join(baseTemplateDir, 'common')
   const ignoreList = getIgnorelist(options)
   const filter = {

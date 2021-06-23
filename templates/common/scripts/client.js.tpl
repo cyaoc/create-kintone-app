@@ -88,7 +88,7 @@ module.exports = class Client {
     })
   }
 
-  async customizeLinks(appid, urls, cover) {
+  async customizeLinks({{#if app}}appid, {{/if}}urls, cover) {
     try {
       if (urls.length === 0) {
         logger.warn('URL not found')
@@ -114,13 +114,13 @@ module.exports = class Client {
         arr.forEach((url) => url.types.forEach((value) => getFileKeys(template, value).push(url.contentUrl)))
         return Array.from(template.values())
       }
-      await this.customize(appid, cb)
+      await this.customize({{#if app}}appid, {{/if}}cb)
     } catch (err) {
       handleError(err)
     }
   }
 
-  async customizeFiles(appid, files, cover) {
+  async customizeFiles({{#if app}}appid, {{/if}}files, cover) {
     try {
       if (files.length === 0) {
         logger.warn('File not found')
@@ -144,28 +144,35 @@ module.exports = class Client {
         arr.forEach((file) => getFileKeys(template, file.type).push(file.contentId))
         return Array.from(template.values())
       }
-      await this.customize(appid, cb)
+      await this.customize({{#if app}}appid, {{/if}}cb)
     } catch (err) {
       handleError(err)
     }
   }
 
-  async customize(appid, callback) {
-    const settings = await this.instance.post('/k/api/js/get.json', { app: appid })
+  async customize({{#if app}}appid, {{/if}}callback) {
+    const settings = await this.instance.post('/k/api/js/get{{#if portal}}SystemSetting{{/if}}.json', {{#if app}}{ app: appid }{{else}}{}{{/if}})
     const jsFiles = callback(settings.data.result.scripts)
     if (jsFiles) {
+      {{#if app}}
       const app = await this.instance.get(`/k/v1/app.json?id=${appid}`)
+      {{/if}}
       const body = {
         jsScope: settings.data.result.scope,
+        {{#if app}}
         id: appid,
         name: app.data.name,
+        {{/if}}
         jsFiles,
       }
-      await this.instance.post('/k/api/dev/app/update.json', body)
+
+      {{#if portal}}const result = {{/if}}await this.instance.post('/k/api/{{#if portal}}js/updateSystemSetting{{else}}dev/app/update{{/if}}.json', body)
+      {{#if app}}
       const result = await this.instance.post('/k/api/dev/app/deploy.json', {
         app: appid,
       })
-      if (result.data.success) return logger.info(`The configuration has been updated to ${app.data.name}`)
+      {{/if}}
+      if (result.data.success) return logger.info(`The configuration has been updated{{#if app}} to ${app.data.name}{{/if}}`)
     }
     return logger.info('No need to update!')
   }
