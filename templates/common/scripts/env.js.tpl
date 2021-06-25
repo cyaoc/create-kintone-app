@@ -20,8 +20,7 @@ const isHostname = (input) => {
   return notEmpty(input) && validate(input.toLowerCase().startsWith('https://'), 'Please do not start with https')
 }
 
-{{#if plugin}}
-{{else}}
+{{#if app}}
 const isNumber = (input) => {
   return notEmpty(input) && validate(!/^\+?[1-9][0-9]*$/.test(input), 'Please enter a positive integer')
 }
@@ -47,8 +46,7 @@ const load = async (source) => {
       name: config.envPassword,
       validate: notEmpty,
     },
-  {{#if plugin}}
-  {{else}}
+  {{#if app}}
     {
       type: 'input',
       message: 'Please enter appid',

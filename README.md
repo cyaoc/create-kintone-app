@@ -14,7 +14,7 @@ npx create-kintone-app ${name}
 
 - [x] kintone plugin development
 - [x] kintone custom app development
-- [ ] kintone portal development
+- [x] kintone portal development
 - [x] automatic compilation & upload
 - [x] support ie11
 - [x] automatic code correction

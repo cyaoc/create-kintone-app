@@ -115,7 +115,7 @@ module.exports = {
         test: {{jsmatch}},
         loader: 'babel-loader',
         options: { cacheDirectory: true },
-        exclude: /node_modules/,
+        exclude: {{#if vue}}(file) => /node_modules/.test(file) &&!/\.vue\.js{{#if typescript}}\.ts{{/if}}/.test(file),{{else}}/node_modules/,{{/if}}
       },
       {{#if vue}}
       {{#if typescript}}
