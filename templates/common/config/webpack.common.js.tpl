@@ -82,6 +82,10 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
+      {{#if vue3}}
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+      {{/if}}
       process: {
         env: {},
       },
