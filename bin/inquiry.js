@@ -119,7 +119,6 @@ module.exports = Object.freeze({
       style: {
         less: aws.css.includes(1),
         scss: aws.css.includes(2),
-        sass6: Number.parseInt(process.version.match(/^v(\d+\.\d+)/)[1]) >= 14,
       },
       react,
       vue,

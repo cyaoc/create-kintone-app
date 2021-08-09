@@ -111,7 +111,7 @@
     "less-loader": "^9.0.0",
     {{/if}}
     {{#if scss}}
-    "node-sass": "^{{#if sass6}}6{{else}}5{{/if}}.0.0",
+    "sass": "^1.37.5",
     "sass-loader": "^12.0.0",
     {{/if}}
     {{/with}}
