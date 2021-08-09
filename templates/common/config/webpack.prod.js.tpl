@@ -9,15 +9,12 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 module.exports = merge(common, {
   mode: 'production',
-  {{#if plugin}}
-  {{else}}
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].css',
-      chunkFilename: 'css/[name].[contenthash:8].css',
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[name].css',
     }),
   ],
-  {{/if}}
   optimization: {
     minimizer: [
       new TerserPlugin({

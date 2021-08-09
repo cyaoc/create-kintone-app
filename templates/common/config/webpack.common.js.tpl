@@ -63,7 +63,7 @@ module.exports = {
   },
   {{/if}}
   output: {
-    filename: `js/[name]{{#if plugin}}{{else}}${isDev ? '' : '.[contenthash:8]'}{{/if}}.js`,
+    filename: `js/[name].js`,
     path: output,
     clean: true,
   },
@@ -93,10 +93,6 @@ module.exports = {
   {{#if plugin}}
     new CopyPlugin({
       patterns: [{ from: source, to: output }],
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].css',
-      chunkFilename: 'css/[name].css',
     }),
   {{/if}}
   {{#if typescript}}
