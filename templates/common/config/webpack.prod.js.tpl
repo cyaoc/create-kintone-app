@@ -1,9 +1,6 @@
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
-{{#if plugin}}
-{{else}}
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-{{/if}}
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 

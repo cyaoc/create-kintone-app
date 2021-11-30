@@ -1,8 +1,3 @@
-{{#if vue}}
-{{else}}
-@import 'normalize.css';
-
-{{/if}}
 .plugin-space-heading {
   margin: 0.8rem;
   font-size: 1.5rem;

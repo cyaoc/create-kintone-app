@@ -1,5 +1,6 @@
 const { resolve } = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
+const isDebug = process.env.NODE_ENV === 'debug'
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 {{#if plugin}}
@@ -13,11 +14,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 {{/if}}
 
 const cssLoaders = (preNumber) => [
-  {{#if plugin}}
-  MiniCssExtractPlugin.loader,
-  {{else}}
-  isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-  {{/if}}
+  isDev && !isDebug ? 'style-loader' : MiniCssExtractPlugin.loader,
   {
     loader: 'css-loader',
     options: {
@@ -40,7 +37,6 @@ const cssLoaders = (preNumber) => [
               },
             },
           ],
-          'postcss-normalize',
         ],
       },
       sourceMap: isDev,
@@ -112,7 +108,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: {{jsmatch}},
+        test: /\.{{#if typescript}}{{#if react}}(tsx?|jsx?){{else}}(ts|js){{/if}}{{else}}{{#if react}}jsx?{{else}}js{{/if}}{{/if}}$/,
         loader: 'babel-loader',
         options: { cacheDirectory: true },
         exclude: {{#if vue}}(file) => /node_modules/.test(file) &&!/\.vue\.js{{#if typescript}}\.ts{{/if}}/.test(file),{{else}}/node_modules/,{{/if}}
@@ -120,7 +116,7 @@ module.exports = {
       {{#if vue}}
       {{#if typescript}}
       {
-        test: /.ts$/,
+        test: /\.ts$/,
         loader: 'ts-loader',
         options: {
           transpileOnly: true,
@@ -130,7 +126,7 @@ module.exports = {
       },
       {{/if}}
       {
-        test: /.vue$/,
+        test: /\.vue$/,
         use: 'vue-loader',
       },
       {{/if}}

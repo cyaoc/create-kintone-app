@@ -76,7 +76,7 @@ const questions = [
   },
   {
     type: 'confirm',
-    message: 'Would you like to install dependencies now with npm?',
+    message: 'Would you like to install dependencies now with yarn?',
     name: 'install',
   },
 ]
@@ -93,23 +93,12 @@ module.exports = Object.freeze({
     const vue = aws.library === 3
     let extensions = ['.js']
     const tsex = ['.ts']
-    const suffix = aws.typescript && react ? '.tsx' : aws.typescript ? '.ts' : '.js'
-    let validate = ['javascript']
-    let tsv = ['typescript']
-    let js = 'js'
-    let ts = 'ts'
     if (react) {
       extensions.unshift('.jsx')
-      validate.push('javascriptreact')
-      tsv.push('typescriptreact')
-      js = 'jsx?'
-      ts = 'tsx?'
       tsex.unshift('.tsx')
     }
     if (aws.typescript) {
       extensions = tsex.concat(extensions)
-      validate = validate.concat(tsv)
-      js = `(${ts}|${js})`
     }
     return {
       ...aws,
@@ -125,9 +114,7 @@ module.exports = Object.freeze({
       vue2: vue && aws.vue === 2,
       vue3: vue && aws.vue === 3,
       extensions,
-      jsmatch: `/.${js}$/`,
-      validate,
-      suffix,
+      suffix: aws.typescript && react ? '.tsx' : aws.typescript ? '.ts' : '.js',
     }
   },
 })

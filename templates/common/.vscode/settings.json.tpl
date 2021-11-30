@@ -5,7 +5,6 @@
     "yarn.lock": true
   },
   "editor.formatOnSave": true,
-  "eslint.validate": [{{#each validate}}"{{this}}"{{#if @last}}{{else}}, {{/if}}{{/each}}],
   {{#if typescript}}
   "typescript.tsdk": "./node_modules/typescript/lib",
   {{/if}}
