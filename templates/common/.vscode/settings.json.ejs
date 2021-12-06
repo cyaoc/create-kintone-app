@@ -5,23 +5,20 @@
     "yarn.lock": true
   },
   "editor.formatOnSave": true,
-  {{#if typescript}}
+<%_ if (typescript) { -%>
   "typescript.tsdk": "./node_modules/typescript/lib",
-  {{/if}}
-  {{#if style.css}}
+<%_ } -%>
   "css.validate": false,
-  {{/if}}
-  {{#if style.less}}
+<%_ if (style.less) { -%>
   "less.validate": false,
-  {{/if}}
-  {{#if style.scss}}
+<%_ } if (style.scss) { -%>
   "scss.validate": false,
-  {{/if}}
-  {{#if lint}}
+<%_ } -%>
+<%_ if (lint) { -%>
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": true,
     "source.fixAll.eslint": true
   },
-  {{/if}}
+<%_ } -%>
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

@@ -176,3 +176,4 @@ $RECYCLE.BIN/
 # Local History for Visual Studio Code
 .history/
 package-lock.json
+yarn.lock

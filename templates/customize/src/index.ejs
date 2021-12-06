@@ -1,0 +1,40 @@
+<%_ if (library.react) { -%>
+import React from 'react'
+import ReactDOM from 'react-dom'
+<%_ } -%>
+<%_ if (library.vue) { -%>
+import <%- library.vue === 2 ? 'Vue' : '{ createApp }' %> from 'vue'
+import App from './App.vue'
+<%_ } else { -%>
+import './app.css'
+<%_ } -%>
+<%_ if (library.react) { %>
+const App = function () {
+  return (
+    <div className="app">
+      <h1>Hello, kintone!</h1>
+    </div>
+  )
+}
+<% } %>
+kintone.events.on('<%- type.app ? 'app.record.index' : 'portal' %>.show', (event<% if (typescript) { %>: KintoneEvent<% } %>) => {
+<%_ if (library.react) { -%>
+  ReactDOM.render(<App />, kintone.<%- type.app ? 'app.getHeader' : 'portal.getContent' %>SpaceElement())
+<%_ } else { -%>
+  const myContainer = kintone.<%- type.app ? 'app.getHeader' : 'portal.getContent' %>SpaceElement()<% if (typescript) { %> as HTMLElement<% } %>
+  <%_ if (library.vue) { -%>
+    <%_ if (library.vue === 2) { -%>
+  Vue.config.productionTip = false
+  new Vue({
+    render: (h) => h(App),
+  }).$mount(myContainer)
+    <%_ } else if (library.vue === 3) { -%>
+  const app = createApp(App)
+  app.mount(myContainer)
+    <%_ } -%>
+  <%_ } else { -%>
+  myContainer.innerHTML = '<div class="app"><h1>Hello, kintone!</h1></div>'
+  <%_ } -%>
+<%_ } -%>
+  return event
+})

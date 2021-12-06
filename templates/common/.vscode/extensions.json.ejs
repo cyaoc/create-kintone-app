@@ -2,9 +2,9 @@
   "recommendations": [
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
-    {{#if lint}}
+  <%_ if (lint) { -%>
     "dbaeumer.vscode-eslint",
-    "stylelint.vscode-stylelint"
-    {{/if}}
+    "stylelint.vscode-stylelint",
+  <%_ } -%>
   ]
 }

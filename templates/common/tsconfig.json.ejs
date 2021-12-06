@@ -4,11 +4,7 @@
     "module": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    {{#if react}}
-    "jsx": "react",
-    {{else}}
-    "jsx": "preserve",
-    {{/if}}
+    "jsx": "<%- library.react ? 'react' : 'preserve' %>",
     "isolatedModules": true,
     "declaration": true,
     "strict": true,

@@ -34,18 +34,14 @@ const main = async () => {
   }
 
   const config = new kintone.Env(envfile)
-{{#if app}}
-  const { env } = await config.load({
+  const { env } = await config.load(<% if (type.app) { %>{
     expends: {
       type: 'input',
       message: 'Please enter appid',
       name: 'appid',
       validate: (input) => /^\+?[1-9][0-9]*$/.test(input),
     },
-  })
-{{else}}
-  const { env } = await config.load()
-{{/if}}
+  }<% } %>)
   const client = new kintone.Client(env)
 
   const server = new WebpackDevServer(devServer, compiler)
@@ -55,11 +51,7 @@ const main = async () => {
   const url = new URL(configuration.output.filename, `https://${devServer.host}${port}`).href
   await client.customizeLinks(
     outputJS().map((file) => url.replace('[name]', file)),
-{{#if app}}
-    { appid: env.appid, upload: ['desktop', 'mobile'] },
-{{else}}
-    { upload: ['desktop', 'mobile'] },
-{{/if}}
+    {<% if (type.app) { %> appid: env.appid,<% } %> upload: ['desktop', 'mobile'] },
   )
 }
 

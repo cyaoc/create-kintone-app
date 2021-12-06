@@ -5,7 +5,7 @@
     "yarn.lock": true
   },
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.validate": ["javascript"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

@@ -1,11 +1,9 @@
 <section class="settings">
-  <h2 class="settings-heading">Settings for {{name}}</h2>
+  <h2 class="settings-heading">Settings for <%- name %></h2>
   <p class="kintoneplugin-desc">This message is displayed on the app page after the app has been updated.</p>
-  {{#if react}}
+<%_ if (library.react || library.vue) { -%>
   <div id="main"></div>
-  {{else if vue}}
-  <div id="main"></div>
-  {{else}}
+<%_ } else { -%>
   <form class="js-submit-settings">
     <p class="kintoneplugin-row">
       <label for="message">
@@ -18,5 +16,5 @@
       <button class="kintoneplugin-button-dialog-ok">Save</button>
     </p>
   </form>
-  {{/if}}
+<%_ } -%>
 </section>

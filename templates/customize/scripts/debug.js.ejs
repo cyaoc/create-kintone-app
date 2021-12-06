@@ -28,18 +28,14 @@ const main = async () => {
   configuration.watchOptions = { aggregateTimeout: 200, poll: 1000, ignored: /node_modules/ }
 
   const config = new kintone.Env(envfile)
-{{#if app}}
-  const { env } = await config.load({
+  const { env } = await config.load(<% if (type.app) { %>{
     expends: {
       type: 'input',
       message: 'Please enter appid',
       name: 'appid',
       validate: (input) => /^\+?[1-9][0-9]*$/.test(input),
     },
-  })
-{{else}}
-  const { env } = await config.load()
-{{/if}}
+  }<% } %>)
   const client = new kintone.Client(env)
   server.start(serverOption)
 
@@ -60,11 +56,7 @@ const main = async () => {
       if (files.length > 0) {
         await client.customizeFiles(
           files,
-{{#if app}}
-          { appid: env.appid, upload: ['desktop', 'mobile'] },
-{{else}}
-          { upload: ['desktop', 'mobile'] },
-{{/if}}
+          {<% if (type.app) { %> appid: env.appid,<% } %> upload: ['desktop', 'mobile'] },
         )
       }
     }

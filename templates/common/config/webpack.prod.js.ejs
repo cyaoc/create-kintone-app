@@ -31,8 +31,7 @@ module.exports = merge(common, {
         },
       }),
     ],
-    {{#if plugin}}
-    {{else}}
+  <%_ if (!type.plugin) { -%>
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -44,6 +43,6 @@ module.exports = merge(common, {
         },
       },
     },
-    {{/if}}
+  <%_ } -%>
   },
 })

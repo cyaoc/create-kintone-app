@@ -1,31 +1,26 @@
-{{#if vue}}
-{{#if vue2}}
-import Vue from 'vue'
-{{else}}
-import { createApp } from 'vue'
-{{/if}}
-import Config from './Config.vue'
-{{else}}
-{{#if react}}
+<%_ if (library.react) { -%>
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-{{/if}}
+<%_ } -%>
+<%_ if (library.vue) { -%>
+import <%- library.vue === 2 ? 'Vue' : '{ createApp }' %> from 'vue'
+import Config from './Config.vue'
+<%_ } else { -%>
 import '../css/config.css'
-{{/if}}
-
-{{#if react}}
-const Config = (props{{#if typescript}}: ConfigProps{{/if}}) => {
+<%_ } -%>
+<%_ if (library.react) { %>
+const Config = function (props<% if (typescript) { %>: ConfigProps<% } %>) {
   const { message } = props
   const [msg, setMessage] = useState(message)
 
-  const handleSubmit = (e{{#if typescript}}: React.FormEvent{{/if}}) => {
+  const handleSubmit = (e<% if (typescript) { %>: React.FormEvent<% } %>) => {
     e.preventDefault()
     kintone.plugin.app.setConfig({ message: msg }, () => {
       window.location.href = `../../flow?app=${kintone.app.getId()}`
     })
   }
 
-  const handleMessage = (e{{#if typescript}}: React.ChangeEvent<HTMLInputElement>{{/if}}) => {
+  const handleMessage = (e<% if (typescript) { %>: React.ChangeEvent<HTMLInputElement><% } %>) => {
     setMessage(e.target.value)
   }
 
@@ -57,25 +52,24 @@ const Config = (props{{#if typescript}}: ConfigProps{{/if}}) => {
     </form>
   )
 }
-
-{{/if}}
+<%_ } %>
 const config = kintone.plugin.app.getConfig(kintone.$PLUGIN_ID)
-{{#if react}}
+<%_ if (library.react) { -%>
 ReactDOM.render(<Config message={config.message} />, document.getElementById('main'))
-{{else if vue}}
-const main = document.getElementById('main'){{#if typescript}} as HTMLDivElement{{/if}}
-{{#if vue2}}
+<%_ } else if (library.vue) { -%>
+const main = document.getElementById('main')<% if (typescript) { %> as HTMLDivElement<% } %>
+  <%_ if (library.vue === 2) { -%>
 new Vue({
   render: (h) => h(Config, { props: { msg: config.message } }),
 }).$mount(main)
-{{else}}
+  <%_ } else if (library.vue === 3) { -%>
 const app = createApp(Config, { msg: config.message })
 app.mount(main)
-{{/if}}
-{{else}}
-const form = document.querySelector('.js-submit-settings'){{#if typescript}} as HTMLFormElement{{/if}}
-const cancelButton = document.querySelector('.js-cancel-button'){{#if typescript}} as HTMLButtonElement{{/if}}
-const message = document.querySelector('.js-text-message'){{#if typescript}} as HTMLInputElement{{/if}}
+  <%_ } -%>
+<%_ } else { -%>
+const form = document.querySelector('.js-submit-settings')<% if (typescript) { %> as HTMLFormElement<% } %>
+const cancelButton = document.querySelector('.js-cancel-button')<% if (typescript) { %> as HTMLButtonElement<% } %>
+const message = document.querySelector('.js-text-message')<% if (typescript) { %> as HTMLInputElement<% } %>
 
 if (config.message) {
   message.value = config.message
@@ -89,4 +83,4 @@ form.addEventListener('submit', (e) => {
 cancelButton.addEventListener('click', () => {
   window.location.href = `../../${kintone.app.getId()}/plugin/`
 })
-{{/if}}
+<%_ } -%>

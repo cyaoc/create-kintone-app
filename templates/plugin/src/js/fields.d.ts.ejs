@@ -1,15 +1,11 @@
-{{#if plugin}}
 declare namespace kintone {
   const $PLUGIN_ID: string
 }
-{{#if react}}
-
+<% if (library.react) { %>
 type ConfigProps = {
   message: string
 }
-{{/if}}
-
-{{/if}}
+<% } %>
 declare namespace kintone.types {
   interface Fields {}
   interface SavedFields extends Fields {
@@ -26,16 +22,14 @@ declare namespace kintone.types {
 interface KintoneEvent {
   record: kintone.types.SavedFields
 }
-{{#if vue}}
-
+<% if (library.vue) { %>
 declare module '*.vue' {
   import { ComponentOptions } from 'vue'
 
   const componentOptions: ComponentOptions
   export default componentOptions
 }
-{{/if}}
-
+<% } %>
 declare module '*.bmp' {
   const path: string
   export default path

@@ -3,15 +3,13 @@ const isDev = process.env.NODE_ENV !== 'production'
 const isDebug = process.env.NODE_ENV === 'debug'
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
-{{#if plugin}}
+<%_ if (type.plugin) { -%>
 const CopyPlugin = require('copy-webpack-plugin')
-{{/if}}
-{{#if typescript}}
+<%_ } if (typescript) { -%>
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-{{/if}}
-{{#if vue}}
+<%_ } if (library.vue) { -%>
 const { VueLoaderPlugin } = require('vue-loader')
-{{/if}}
+<%_ } -%>
 
 const cssLoaders = (preNumber) => [
   isDev && !isDebug ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -48,73 +46,69 @@ const source = resolve(__dirname, '../src')
 const output = resolve(__dirname, '../dist')
 
 module.exports = {
-  {{#if plugin}}
   entry: {
-    desktop: resolve(source, 'js/desktop{{suffix}}'),
-    config: resolve(source, 'js/config{{suffix}}'),
+    <%- type.plugin ? 'desktop' : 'app' %>: resolve(source, '<%- type.plugin ? `js/desktop${suffix}` : `index${suffix}` %>'),
+  <%_ if (type.plugin) { -%>
+    config: resolve(source, 'js/config<%- suffix %>'),
+  <%_ } -%>
   },
-  {{else}}
-  entry: {
-    app: resolve(source, 'index{{suffix}}'),
-  },
-  {{/if}}
   output: {
     filename: `js/[name].js`,
     path: output,
     clean: true,
   },
   resolve: {
-    extensions: [{{#each extensions}}'{{this}}', {{/each}}'.json'],
+    extensions: [<%- extensions.map(el=>`'${el}'`).join(', ') %>, '.json'],
   },
   externals: {
-  {{#if plugin}}
-    {{#if react}}
-     react: 'React',
-     'react-dom': 'ReactDOM',
-    {{else if vue}}
+  <%_ if (type.plugin) { -%>
+    <%_ if (library.react) { -%>
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    <%_ } if (library.vue) { -%>
      vue: 'Vue',
-    {{/if}}
-  {{/if}}
+    <%_ } -%>
+  <%_ } -%>
   },
   plugins: [
     new webpack.DefinePlugin({
-      {{#if vue3}}
+    <%_ if (library.vue === 3) { -%>
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
-      {{/if}}
+    <%_ } -%>
       process: {
         env: {},
       },
     }),
-  {{#if plugin}}
+  <%_ if (type.plugin) { -%>
     new CopyPlugin({
       patterns: [{ from: source, to: output }],
     }),
-  {{/if}}
-  {{#if typescript}}
+  <%_ } -%>
+  <%_ if (typescript) { -%>
     new ForkTsCheckerWebpackPlugin({
       typescript: {
-        {{#if vue}}
+      <%_ if (library.vue) { -%>
         vue: true,
-        {{/if}}
+      <%_ } -%>
         configFile: resolve(__dirname, '../tsconfig.json'),
       },
     }),
-  {{/if}}
-  {{#if vue}}
+  <%_ } -%>
+  <%_ if (library.vue) { -%>
     new VueLoaderPlugin(),
-  {{/if}}
+  <%_ } -%>
   ],
   module: {
     rules: [
       {
-        test: /\.{{#if typescript}}{{#if react}}(tsx?|jsx?){{else}}(ts|js){{/if}}{{else}}{{#if react}}jsx?{{else}}js{{/if}}{{/if}}$/,
+        test: /\.<%- typescript ? library.react ? '(tsx?|jsx?)' : '(ts|js)' : library.react ? 'jsx?' : 'js' %>$/,
         loader: 'babel-loader',
         options: { cacheDirectory: true },
-        exclude: {{#if vue}}(file) => /node_modules/.test(file) &&!/\.vue\.js{{#if typescript}}\.ts{{/if}}/.test(file),{{else}}/node_modules/,{{/if}}
+        exclude: <% if (library.vue) { %>(file) => /node_modules/.test(file) &&!/\.vue\.js<% if (typescript) { %>\.ts<% } %>/.test(file),<% } else { %>/node_modules/,<% } %>
       },
-      {{#if vue}}
-      {{#if typescript}}
+    <%_ if (library.vue) { -%>
+      <%_ if (typescript) { -%>
       {
         test: /\.ts$/,
         loader: 'ts-loader',
@@ -124,17 +118,17 @@ module.exports = {
         },
         exclude: /node_modules/,
       },
-      {{/if}}
+      <%_ } -%>
       {
         test: /\.vue$/,
         use: 'vue-loader',
       },
-      {{/if}}
+    <%_ } -%>
       {
         test: /\.css$/,
         use: cssLoaders(0),
       },
-      {{#if style.less}}
+    <%_ if (style.less) { -%>
       {
         test: /\.less$/,
         use: [
@@ -143,17 +137,16 @@ module.exports = {
             loader: 'less-loader',
             options: {
               sourceMap: isDev,
-              {{#if vue3}}
+            <%_ if (library.vue === 3) { -%>
               lessOptions: {
                 javascriptEnabled: true,
               },
-              {{/if}}
+            <%_ } -%>
             },
           },
         ],
       },
-      {{/if}}
-      {{#if style.scss}}
+    <%_ } if (style.scss) { -%>
       {
         test: /\.scss$/,
         use: [
@@ -166,7 +159,7 @@ module.exports = {
           },
         ],
       },
-      {{/if}}
+    <%_ } -%>
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
         type: 'asset/inline',

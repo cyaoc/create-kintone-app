@@ -1,20 +1,15 @@
-{{#if react}}
+<%_ if (library.react) { -%>
 import React from 'react'
 import ReactDOM from 'react-dom'
-{{/if}}
-{{#if vue}}
-{{#if vue2}}
-import Vue from 'vue'
-{{else}}
-import { createApp } from 'vue'
-{{/if}}
+<%_ } -%>
+<%_ if (library.vue) { -%>
+import <%- library.vue === 2 ? 'Vue' : '{ createApp }' %> from 'vue'
 import Desktop from './Desktop.vue'
-{{else}}
+<%_ } else { -%>
 import '../css/desktop.css'
-{{/if}}
-{{#if react}}
-
-const Desktop = (props{{#if typescript}}: ConfigProps{{/if}}) => {
+<%_ } -%>
+<%_ if (library.react) { %>
+const Desktop = function (props<% if (typescript) { %>: ConfigProps<% } %>) {
   const { message } = props
   return (
     <>
@@ -23,25 +18,24 @@ const Desktop = (props{{#if typescript}}: ConfigProps{{/if}}) => {
     </>
   )
 }
-{{/if}}
-
+<%_ } %>
 const pid = kintone.$PLUGIN_ID
 
-kintone.events.on('app.record.index.show', (event{{#if typescript}}: KintoneEvent{{/if}}) => {
+kintone.events.on('app.record.index.show', (event<% if (typescript) { %>: KintoneEvent<% } %>) => {
   const config = kintone.plugin.app.getConfig(pid)
-  const spaceElement = kintone.app.getHeaderSpaceElement(){{#if typescript}} as HTMLElement{{/if}}
-{{#if react}}
+  const spaceElement = kintone.app.getHeaderSpaceElement()<% if (typescript) { %> as HTMLElement<% } %>
+<%_ if (library.react) { -%>
   ReactDOM.render(<Desktop message={config.message} />, spaceElement)
-  {{else if vue}}
-  {{#if vue2}}
+<%_ } else if (library.vue) { -%>
+  <%_ if (library.vue === 2) { -%>
   new Vue({
     render: (h) => h(Desktop, { props: { msg: config.message } }),
   }).$mount(spaceElement)
-  {{else}}
+  <%_ } else if (library.vue === 3) { -%>
   const app = createApp(Desktop, { msg: config.message })
   app.mount(spaceElement)
-  {{/if}}
-{{else}}
+  <%_ } -%>
+<%_ } else { -%>
   const fragment = document.createDocumentFragment()
   const headingEl = document.createElement('h3')
   const messageEl = document.createElement('p')
@@ -54,6 +48,6 @@ kintone.events.on('app.record.index.show', (event{{#if typescript}}: KintoneEven
   fragment.appendChild(headingEl)
   fragment.appendChild(messageEl)
   spaceElement.appendChild(fragment)
-{{/if}}
+<%_ } -%>
   return event
 })

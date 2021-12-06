@@ -55,14 +55,15 @@ const main = async () => {
       const key = value.slice(1)
       if (type === 'css') return undefined
       return url.replace('[name]', key)
+    } else if (!value.startsWith('https://')) {
+      return `${baseurl}/${value}`
     }
-    return `${baseurl}/${value}`
+    return value
   }
 
   const manifest = path.resolve(configuration.output.path, 'manifest.json')
   const data = plugin.saveAsSync(options.manifest, manifest, change)
   plugin.copyNecessarySync(options.manifest, configuration.output.path, data)
-
   const buffer = await plugin.pack(manifest, options.ppk)
 
   await client.uploadPlugin(`${pkg.name}.zip`, buffer)

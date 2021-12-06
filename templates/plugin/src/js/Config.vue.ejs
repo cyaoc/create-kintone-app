@@ -15,15 +15,11 @@
   </form>
 </template>
 
-<script{{#if typescript}} lang="ts"{{/if}}>
-{{#if vue2}}
-import Vue from 'vue'
-{{else}}
-import { defineComponent } from 'vue'
-{{/if}}
+<script<% if (typescript) { %> lang="ts"<% } %>>
+import <%- library.vue === 2 ? 'Vue' : '{ defineComponent }' %> from 'vue'
 
-export default {{#if vue2}}Vue.extend{{else}}defineComponent{{/if}}({
-  name: 'Config',
+export default <%- library.vue === 2 ? 'Vue.extend' : 'defineComponent' %>({
+  name: 'ConfigApp',
   props: {
     msg: {
       type: String,
@@ -32,7 +28,7 @@ export default {{#if vue2}}Vue.extend{{else}}defineComponent{{/if}}({
   },
   methods: {
     handleSubmit() {
-      const input = this.$refs.msg{{#if typescript}} as HTMLInputElement{{/if}}
+      const input = this.$refs.msg<% if (typescript) { %> as HTMLInputElement<% } %>
       kintone.plugin.app.setConfig({ message: input.value }, () => {
         window.location.href = `../../flow?app=${kintone.app.getId()}`
       })
@@ -45,6 +41,5 @@ export default {{#if vue2}}Vue.extend{{else}}defineComponent{{/if}}({
 </script>
 
 <style>
-@import 'normalize.css/opinionated.css';
 @import '../css/config.css';
 </style>

@@ -5,13 +5,11 @@
       {
         "modules": false
       }
-    ]
-    {{#if react}}
-    ,"@babel/preset-react"
-    {{/if}}
-    {{#if typescript}}
-    ,"@babel/preset-typescript"
-    {{/if}}
+    ]<%_ if (library.react) { -%>,
+    "@babel/preset-react"<%_ } -%>
+    <%_ if (typescript) { -%>,
+    "@babel/preset-typescript"
+    <%_ } -%>
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",

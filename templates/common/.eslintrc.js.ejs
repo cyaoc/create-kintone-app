@@ -1,0 +1,53 @@
+module.exports = {
+  root: true,
+  parser: '<%- library.vue ? 'vue-eslint-parser' : typescript ? '@typescript-eslint/parser' : '@babel/eslint-parser' %>',
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: [
+    '@cybozu/eslint-config/globals/kintone',
+  <%_ if (library.react) { -%>
+    'plugin:react/recommended',
+    'airbnb',
+    'airbnb/hooks',
+  <%_ } else { -%>
+    'airbnb-base',
+    <%_ if (library.vue) { -%>
+    'plugin:vue/<%- library.vue === 3 ? 'vue3-recommended' : 'recommended' %>',
+    <%_ } -%>
+  <%_ } -%>
+  <%_ if (typescript) { -%>
+    '@cybozu/eslint-config/presets/typescript-prettier',
+  <%_ } -%>
+    'plugin:prettier/recommended',
+  ],
+  parserOptions: {
+  <%_ if (library.vue) { -%>
+    parser: '<%- typescript ? '@typescript-eslint/parser' : '@babel/eslint-parser' %>',
+  <%_ } -%>
+    ecmaVersion: 12,
+    sourceType: 'module',
+  },
+  plugins: [
+  <%_ if (library.react) { -%>
+    'react',
+  <%_ } if (library.vue) { -%>
+    'vue',
+  <%_ } if (typescript) { -%>
+    '@typescript-eslint',
+  <%_ } -%>
+  ],
+  rules: {
+  <%_ if (library.react) { -%>
+    'react/jsx-filename-extension': [1, { extensions: [<%- extensions.map(el=>`'${el}'`).join(', ') %>] }],
+    'func-names': ['error', 'as-needed'],
+    <%_ if (typescript) { -%>
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
+    <%_ } else { -%>
+    'react/prop-types': 'off',
+    <%_ } -%>
+  <%_ } -%>
+  },
+};

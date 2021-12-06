@@ -1,12 +1,12 @@
 <template>
   <div class="app">
-    <h1>\{{ msg }}</h1>
+    <h1>{{ msg }}</h1>
   </div>
 </template>
 
-<script{{#if typescript}} lang="ts"{{/if}}>
+<script<% if (typescript) { %> lang="ts"<% } %>>
 export default {
-  name: 'App',
+  name: 'IndexApp',
   data() {
     return {
       msg: 'Hello kintone!',
