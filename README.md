@@ -1,3 +1,5 @@
+[中文说明](https://cybozudev.kf5.com/hc/kb/article/1520851/)
+
 # create-kintone-app
 
 A CLI tool for creating kintone app development templates!
@@ -16,6 +18,7 @@ npx create-kintone-app ${name}
 - [x] kintone custom app development
 - [x] kintone portal development
 - [x] automatic compilation & upload
+- [x] debug script
 - [x] support ie11
 - [x] automatic code correction
 - [x] support react
