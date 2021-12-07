@@ -1,4 +1,4 @@
-[中文说明](https://cybozudev.kf5.com/hc/kb/article/1520851/)
+# [中文说明](https://cybozudev.kf5.com/hc/kb/article/1520851/)
 
 # create-kintone-app
 
