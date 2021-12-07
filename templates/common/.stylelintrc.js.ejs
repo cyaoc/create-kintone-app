@@ -1,0 +1,16 @@
+module.exports = {
+  extends: [
+    'stylelint-config-standard',
+  <%_ if (style.scss) { -%>
+    'stylelint-config-standard-scss',
+  <%_ } -%>
+  <%_ if (style.less) { -%>
+    'stylelint-config-recommended-less',
+  <%_ } -%>
+  <%_ if (library.vue) { -%>
+    'stylelint-config-recommended-vue<% if (style.scss) { %>/scss<% } %>',
+  <%_ } -%>
+    'stylelint-prettier/recommended'
+  ],
+  ignoreFiles: ['node_modules/**/*', 'dist/**/*'<% if (type.plugin) { %>, 'src/css/51-modern-default.css'<% } %>],
+}

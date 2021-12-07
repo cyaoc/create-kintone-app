@@ -1,0 +1,53 @@
+<%_ if (library.react) { -%>
+import React from 'react'
+import ReactDOM from 'react-dom'
+<%_ } -%>
+<%_ if (library.vue) { -%>
+import <%- library.vue === 2 ? 'Vue' : '{ createApp }' %> from 'vue'
+import Desktop from './Desktop.vue'
+<%_ } else { -%>
+import '../css/desktop.css'
+<%_ } -%>
+<%_ if (library.react) { %>
+const Desktop = function (props<% if (typescript) { %>: ConfigProps<% } %>) {
+  const { message } = props
+  return (
+    <>
+      <h3 className="plugin-space-heading">Hello kintone plugin!</h3>
+      <p className="plugin-space-message">{message}</p>
+    </>
+  )
+}
+<%_ } %>
+const pid = kintone.$PLUGIN_ID
+
+kintone.events.on('app.record.index.show', (event<% if (typescript) { %>: KintoneEvent<% } %>) => {
+  const config = kintone.plugin.app.getConfig(pid)
+  const spaceElement = kintone.app.getHeaderSpaceElement()<% if (typescript) { %> as HTMLElement<% } %>
+<%_ if (library.react) { -%>
+  ReactDOM.render(<Desktop message={config.message} />, spaceElement)
+<%_ } else if (library.vue) { -%>
+  <%_ if (library.vue === 2) { -%>
+  new Vue({
+    render: (h) => h(Desktop, { props: { msg: config.message } }),
+  }).$mount(spaceElement)
+  <%_ } else if (library.vue === 3) { -%>
+  const app = createApp(Desktop, { msg: config.message })
+  app.mount(spaceElement)
+  <%_ } -%>
+<%_ } else { -%>
+  const fragment = document.createDocumentFragment()
+  const headingEl = document.createElement('h3')
+  const messageEl = document.createElement('p')
+
+  messageEl.classList.add('plugin-space-message')
+  messageEl.textContent = config.message
+  headingEl.classList.add('plugin-space-heading')
+  headingEl.textContent = 'Hello kintone plugin!'
+
+  fragment.appendChild(headingEl)
+  fragment.appendChild(messageEl)
+  spaceElement.appendChild(fragment)
+<%_ } -%>
+  return event
+})

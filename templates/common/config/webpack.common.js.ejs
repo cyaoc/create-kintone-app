@@ -1,0 +1,173 @@
+const { resolve } = require('path')
+const isDev = process.env.NODE_ENV !== 'production'
+const isDebug = process.env.NODE_ENV === 'debug'
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const webpack = require('webpack')
+<%_ if (type.plugin) { -%>
+const CopyPlugin = require('copy-webpack-plugin')
+<%_ } if (typescript) { -%>
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+<%_ } if (library.vue) { -%>
+const { VueLoaderPlugin } = require('vue-loader')
+<%_ } -%>
+
+const cssLoaders = (preNumber) => [
+  isDev && !isDebug ? 'style-loader' : MiniCssExtractPlugin.loader,
+  {
+    loader: 'css-loader',
+    options: {
+      sourceMap: isDev,
+      importLoaders: preNumber + 1,
+    },
+  },
+  {
+    loader: 'postcss-loader',
+    options: {
+      postcssOptions: {
+        plugins: [
+          'postcss-flexbugs-fixes',
+          [
+            'postcss-preset-env',
+            {
+              autoprefixer: {
+                grid: true,
+                flexbox: 'no-2009',
+              },
+            },
+          ],
+        ],
+      },
+      sourceMap: isDev,
+    },
+  },
+]
+
+const source = resolve(__dirname, '../src')
+const output = resolve(__dirname, '../dist')
+
+module.exports = {
+  entry: {
+    <%- type.plugin ? 'desktop' : 'app' %>: resolve(source, '<%- type.plugin ? `js/desktop${suffix}` : `index${suffix}` %>'),
+  <%_ if (type.plugin) { -%>
+    config: resolve(source, 'js/config<%- suffix %>'),
+  <%_ } -%>
+  },
+  output: {
+    filename: `js/[name].js`,
+    path: output,
+    clean: true,
+  },
+  resolve: {
+    extensions: [<%- extensions.map(el=>`'${el}'`).join(', ') %>, '.json'],
+  },
+  externals: {
+  <%_ if (type.plugin) { -%>
+    <%_ if (library.react) { -%>
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    <%_ } if (library.vue) { -%>
+     vue: 'Vue',
+    <%_ } -%>
+  <%_ } -%>
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+    <%_ if (library.vue === 3) { -%>
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+    <%_ } -%>
+      process: {
+        env: {},
+      },
+    }),
+  <%_ if (type.plugin) { -%>
+    new CopyPlugin({
+      patterns: [{ from: source, to: output }],
+    }),
+  <%_ } -%>
+  <%_ if (typescript) { -%>
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+      <%_ if (library.vue) { -%>
+        vue: true,
+      <%_ } -%>
+        configFile: resolve(__dirname, '../tsconfig.json'),
+      },
+    }),
+  <%_ } -%>
+  <%_ if (library.vue) { -%>
+    new VueLoaderPlugin(),
+  <%_ } -%>
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.<%- typescript ? library.react ? '(tsx?|jsx?)' : '(ts|js)' : library.react ? 'jsx?' : 'js' %>$/,
+        loader: 'babel-loader',
+        options: { cacheDirectory: true },
+        exclude: <% if (library.vue) { %>(file) => /node_modules/.test(file) &&!/\.vue\.js<% if (typescript) { %>\.ts<% } %>/.test(file),<% } else { %>/node_modules/,<% } %>
+      },
+    <%_ if (library.vue) { -%>
+      <%_ if (typescript) { -%>
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules/,
+      },
+      <%_ } -%>
+      {
+        test: /\.vue$/,
+        use: 'vue-loader',
+      },
+    <%_ } -%>
+      {
+        test: /\.css$/,
+        use: cssLoaders(0),
+      },
+    <%_ if (style.less) { -%>
+      {
+        test: /\.less$/,
+        use: [
+          ...cssLoaders(1),
+          {
+            loader: 'less-loader',
+            options: {
+              sourceMap: isDev,
+            <%_ if (library.vue === 3) { -%>
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            <%_ } -%>
+            },
+          },
+        ],
+      },
+    <%_ } if (style.scss) { -%>
+      {
+        test: /\.scss$/,
+        use: [
+          ...cssLoaders(1),
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDev,
+            },
+          },
+        ],
+      },
+    <%_ } -%>
+      {
+        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
+        type: 'asset/inline',
+      },
+      {
+        test: /\.(ttf|woff|woff2|eot|otf)$/,
+        type: 'asset/inline',
+      },
+    ],
+  },
+}

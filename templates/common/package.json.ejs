@@ -1,0 +1,123 @@
+{
+  "name": "<%- name %>",
+  "version": "1.0.0",
+  "description": "<%- description %>",
+  "scripts": {
+    "format": "prettier --write src",
+  <%_ if (lint) { -%>
+    "lint": "eslint --fix -c .eslintrc.js --ignore-path .eslintignore --ext <%- (library.vue ? extensions.concat(['.vue']) : extensions).join(',') %> src && stylelint --config .stylelintrc.js src/**/*.<%- styleEx.length === 1 ? styleEx[0] : `{${styleEx.join(',')}}` %>",
+  <%_ } -%>
+    "start": "cross-env NODE_ENV=development node ./scripts/server.js",
+    "debug": "cross-env NODE_ENV=debug node ./scripts/debug.js",
+    "build": "cross-env NODE_ENV=production <%- type.plugin ? 'node ./scripts/build.js' : 'webpack --config ./config/webpack.prod.js' %>"
+  },
+  "keywords": [
+    "kintone"
+  ],
+  "author": "<%- author %>",
+  "license": "ISC",
+  "browserslist": ">0.2%, not dead, ie >= 11, not op_mini all",
+  "devDependencies": {
+  <%_ if (lint) { -%>
+    "@cybozu/eslint-config": "^16.0.1",
+    "eslint": "^8.4.0",
+    "eslint-config-airbnb": "^19.0.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "stylelint": "^14.1.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-prettier": "^2.0.0",
+    <%_ if (typescript) { -%>
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    <%_ } else { -%>
+    "@babel/eslint-parser": "^7.16.3",
+    <%_ } -%>
+    <%_ if (library.react) { -%>
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    <%_ } -%>
+    <%_ if (library.vue) { -%>
+    "eslint-plugin-vue": "^8.1.1",
+    "vue-eslint-parser": "^8.0.1",
+    "postcss-html": "^1.3.0",
+    "stylelint-config-recommended-vue": "^1.1.0",
+    <%_ } -%>
+    <%_ if (style.less) { -%>
+    "stylelint-config-recommended-less": "^1.0.1",
+    <%_ } -%>
+    <%_ if (style.scss) { -%>
+    "stylelint-config-standard-scss": "^3.0.0",
+    <%_ } -%>
+  <%_ } -%>
+  <%_ if (type.plugin) { -%>
+    "copy-webpack-plugin": "^9.0.1",
+  <%_ } -%>
+  <%_ if (library.react) { -%>
+    "@babel/preset-react": "^7.16.0",
+  <%_ } -%>
+  <%_ if (library.vue === 2) { -%>
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14",
+  <%_ } -%>
+  <%_ if (library.vue === 3) { -%>
+    "@vue/compiler-sfc": "^3.2.23",
+    "vue-loader": "^16.8.3",
+  <%_ } -%>
+  <%_ if (typescript) { -%>
+    "@babel/preset-typescript": "^7.16.0",
+    "@kintone/dts-gen": "^5.0.11",
+    "fork-ts-checker-webpack-plugin": "^6.5.0",
+    "typescript": "^4.5.2",
+    <%_ if (library.react) { -%>
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    <%_ } -%>
+    <%_ if (library.vue) { -%>
+    "ts-loader": "^9.2.6",
+    <%_ } -%>
+  <%_ } -%>
+  <%_ if (style.less) { -%>
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+  <%_ } -%>
+  <%_ if (style.scss) { -%>
+    "sass": "^1.44.0",
+    "sass-loader": "^12.3.0",
+  <%_ } -%>
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "babel-loader": "^8.2.3",
+    "cross-env": "^7.0.3",
+    "prettier": "^2.5.1",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.2.0",
+    "kintone-dev-tools": "^1.0.9",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss": "^8.4.4",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.0.1",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.2.5",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+  <%_ if (library.react) { -%>
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+  <%_ } -%>
+  <%_ if (library.vue) { -%>
+    "vue": "^<%- library.vue === 2 ? '2.6.14' : '3.2.23' %>",
+  <%_ } -%>
+    "@babel/runtime-corejs3": "^7.16.3"
+  }
+}

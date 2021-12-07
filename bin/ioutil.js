@@ -1,7 +1,7 @@
 const fs = require('fs')
 const ncp = require('ncp')
 const path = require('path')
-const handlebars = require('handlebars')
+const ejs = require('ejs')
 const recursive = require('recursive-readdir')
 const util = require('util')
 
@@ -55,30 +55,29 @@ const isNodeDir = (dir) => {
   }
 }
 
-const compile = (meta, file) => {
-  const content = fs.readFileSync(file).toString()
-  const result = handlebars.compile(content)(meta)
+const compile = async (file, options) => {
+  const result = await ejs.renderFile(file, options)
   fs.writeFileSync(file, result)
   let target = file.split('.').slice(0, -1).join('.')
-  path.extname(target) === '' && !path.basename(target).startsWith('.') && (target += meta.suffix)
+  path.extname(target) === '' && !path.basename(target).startsWith('.') && (target += options.suffix)
   fs.renameSync(file, target)
 }
 
 const ignore = {
-  vue: ['Desktop.vue.tpl', 'Config.vue.tpl', 'App.vue.tpl'],
-  ts: ['tsconfig.json.tpl', 'fields.d.ts.tpl'],
-  lint: ['.eslintignore.tpl', '.eslintrc.js.tpl', '.stylelintrc.js.tpl'],
+  vue: ['Desktop.vue.ejs', 'Config.vue.ejs', 'App.vue.ejs'],
+  ts: ['tsconfig.json.ejs', 'fields.d.ts.ejs'],
+  lint: ['.eslintignore.ejs', '.eslintrc.js.ejs', '.stylelintrc.js.ejs'],
 }
 
 const getIgnorelist = (options) => {
   let arr = options.lint ? [] : ignore.lint
-  if (!options.vue) arr = arr.concat(ignore.vue)
+  if (!options.library.vue) arr = arr.concat(ignore.vue)
   if (!options.typescript) arr = arr.concat(ignore.ts)
   return new Set(arr)
 }
 
 const output = async (targetDir, options) => {
-  const sourceDir = path.join(baseTemplateDir, options.plugin ? 'plugin' : 'customize')
+  const sourceDir = path.join(baseTemplateDir, options.type.plugin ? 'plugin' : 'customize')
   const commonDir = path.join(baseTemplateDir, 'common')
   const ignoreList = getIgnorelist(options)
   const filter = {
@@ -91,12 +90,10 @@ const output = async (targetDir, options) => {
   await npcp(sourceDir, targetDir, filter)
   const files = await recursive(targetDir, [
     (file, stats) => {
-      return !stats.isDirectory() && path.extname(file) != '.tpl'
+      return !stats.isDirectory() && path.extname(file) != '.ejs'
     },
   ])
-  files.forEach((file) => {
-    compile(options, file)
-  })
+  await Promise.all(files.map((file) => compile(file, options)))
 }
 
 module.exports = Object.freeze({

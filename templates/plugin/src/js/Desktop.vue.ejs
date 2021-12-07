@@ -1,0 +1,22 @@
+<template>
+  <div>
+    <h3 class="plugin-space-heading">Hello kintone plugin!</h3>
+    <p class="plugin-space-message">{{ msg }}</p>
+  </div>
+</template>
+
+<script<% if (typescript) { %> lang="ts"<% } %>>
+export default {
+  name: 'DesktopApp',
+  props: {
+    msg: {
+      type: String,
+      default: '',
+    },
+  },
+}
+</script>
+
+<style>
+@import '../css/desktop.css';
+</style>

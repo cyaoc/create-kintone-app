@@ -56,8 +56,8 @@ const questions = [
     message: 'Which version do you want to choose?',
     name: 'vue',
     choices: [
-      { name: 'Vue 2.x(compatibility first)', value: 2 },
-      { name: 'Vue 3.x(new features first)', value: 3 },
+      { name: 'Vue 2.x', value: 2 },
+      { name: 'Vue 3.x', value: 3 },
     ],
     when(answers) {
       return answers.library === 3
@@ -76,7 +76,7 @@ const questions = [
   },
   {
     type: 'confirm',
-    message: 'Would you like to install dependencies now with npm?',
+    message: 'Would you like to install dependencies now with yarn?',
     name: 'install',
   },
 ]
@@ -86,49 +86,38 @@ module.exports = Object.freeze({
     return inquirer.prompt(questions)
   },
   options: (aws) => {
-    const app = aws.type === 1
-    const plugin = aws.type === 2
-    const portal = aws.type === 3
-    const react = aws.library === 2
-    const vue = aws.library === 3
-    let extensions = ['.js']
-    const tsex = ['.ts']
-    const suffix = aws.typescript && react ? '.tsx' : aws.typescript ? '.ts' : '.js'
-    let validate = ['javascript']
-    let tsv = ['typescript']
-    let js = 'js'
-    let ts = 'ts'
-    if (react) {
-      extensions.unshift('.jsx')
-      validate.push('javascriptreact')
-      tsv.push('typescriptreact')
-      js = 'jsx?'
-      ts = 'tsx?'
-      tsex.unshift('.tsx')
-    }
-    if (aws.typescript) {
-      extensions = tsex.concat(extensions)
-      validate = validate.concat(tsv)
-      js = `(${ts}|${js})`
-    }
-    return {
-      ...aws,
-      app,
-      plugin,
-      portal,
+    const options = {
+      type: {
+        app: aws.type === 1,
+        plugin: aws.type === 2,
+        portal: aws.type === 3,
+      },
+      author: aws.author,
+      description: aws.description,
       style: {
         less: aws.css.includes(1),
         scss: aws.css.includes(2),
-        sass6: Number.parseInt(process.version.match(/^v(\d+\.\d+)/)[1]) >= 14,
       },
-      react,
-      vue,
-      vue2: vue && aws.vue === 2,
-      vue3: vue && aws.vue === 3,
-      extensions,
-      jsmatch: `/.${js}$/`,
-      validate,
-      suffix,
+      library: {
+        react: aws.library === 2,
+      },
+      typescript: aws.typescript,
+      lint: aws.lint,
+      install: aws.install,
+      extensions: ['.js'],
+      styleEx: ['css'],
     }
+    if (aws.library === 3) options.library.vue = aws.vue
+    options.suffix = options.typescript && options.library.react ? '.tsx' : options.typescript ? '.ts' : '.js'
+    const tsex = ['.ts']
+    if (options.library.react) {
+      options.extensions.unshift('.jsx')
+      tsex.unshift('.tsx')
+    }
+    if (options.typescript) options.extensions = tsex.concat(options.extensions)
+    if (options.style.less) options.styleEx.push('less')
+    if (options.style.scss) options.styleEx.push('scss')
+    if (options.library.vue) options.styleEx.push('vue')
+    return options
   },
 })

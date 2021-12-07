@@ -1,0 +1,20 @@
+<template>
+  <div class="app">
+    <h1>{{ msg }}</h1>
+  </div>
+</template>
+
+<script<% if (typescript) { %> lang="ts"<% } %>>
+export default {
+  name: 'IndexApp',
+  data() {
+    return {
+      msg: 'Hello kintone!',
+    }
+  },
+}
+</script>
+
+<style>
+@import 'app.css';
+</style>

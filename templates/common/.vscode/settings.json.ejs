@@ -1,0 +1,24 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "dist": true,
+    "yarn.lock": true
+  },
+  "editor.formatOnSave": true,
+<%_ if (typescript) { -%>
+  "typescript.tsdk": "./node_modules/typescript/lib",
+<%_ } -%>
+  "css.validate": false,
+<%_ if (style.less) { -%>
+  "less.validate": false,
+<%_ } if (style.scss) { -%>
+  "scss.validate": false,
+<%_ } -%>
+<%_ if (lint) { -%>
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true,
+    "source.fixAll.eslint": true
+  },
+<%_ } -%>
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}

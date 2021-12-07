@@ -1,0 +1,27 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ]<%_ if (library.react) { -%>,
+    "@babel/preset-react"<%_ } -%>
+    <%_ if (typescript) { -%>,
+    "@babel/preset-typescript"
+    <%_ } -%>
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": {
+          "version": 3,
+          "proposals": true
+        },
+        "useESModules": true
+      }
+    ]
+  ]
+}
