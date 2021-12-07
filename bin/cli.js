@@ -27,7 +27,7 @@ program.arguments('<project-directory>').action(async (projectName) => {
   ${cmd(`cd ${project.path}`)}
   ${cmd(`npm install`)}`
       if (onptions.install) {
-        const result = spawn.sync('npx', ['yarn'], { stdio: 'inherit', cwd: project.path })
+        const result = spawn.sync('npm', ['install'], { stdio: 'inherit', cwd: project.path })
         if (result.error) throw result.error
 
         msg = `${success(`We suggest that you begin by typing:`)}

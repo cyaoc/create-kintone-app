@@ -76,7 +76,7 @@ const questions = [
   },
   {
     type: 'confirm',
-    message: 'Would you like to install dependencies now with yarn?',
+    message: 'Would you like to install dependencies now with npm?',
     name: 'install',
   },
 ]

@@ -20,7 +20,7 @@
   "devDependencies": {
   <%_ if (lint) { -%>
     "@cybozu/eslint-config": "^16.0.1",
-    "eslint": "^8.4.0",
+    "eslint": "^8.4.1",
     "eslint-config-airbnb": "^19.0.2",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
@@ -30,8 +30,8 @@
     "stylelint-config-standard": "^24.0.0",
     "stylelint-prettier": "^2.0.0",
     <%_ if (typescript) { -%>
-    "@typescript-eslint/eslint-plugin": "^5.5.0",
-    "@typescript-eslint/parser": "^5.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     <%_ } else { -%>
     "@babel/eslint-parser": "^7.16.3",
     <%_ } -%>
@@ -41,7 +41,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     <%_ } -%>
     <%_ if (library.vue) { -%>
-    "eslint-plugin-vue": "^8.1.1",
+    "eslint-plugin-vue": "^8.2.0",
     "vue-eslint-parser": "^8.0.1",
     "postcss-html": "^1.3.0",
     "stylelint-config-recommended-vue": "^1.1.0",
@@ -54,7 +54,7 @@
     <%_ } -%>
   <%_ } -%>
   <%_ if (type.plugin) { -%>
-    "copy-webpack-plugin": "^9.0.1",
+    "copy-webpack-plugin": "^10.0.0",
   <%_ } -%>
   <%_ if (library.react) { -%>
     "@babel/preset-react": "^7.16.0",
@@ -64,7 +64,7 @@
     "vue-template-compiler": "^2.6.14",
   <%_ } -%>
   <%_ if (library.vue === 3) { -%>
-    "@vue/compiler-sfc": "^3.2.23",
+    "@vue/compiler-sfc": "^3.2.24",
     "vue-loader": "^16.8.3",
   <%_ } -%>
   <%_ if (typescript) { -%>
@@ -105,7 +105,7 @@
     "postcss-preset-env": "^7.0.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.2.5",
-    "webpack": "^5.64.4",
+    "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.6.0",
     "webpack-merge": "^5.8.0"
