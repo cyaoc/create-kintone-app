@@ -47,6 +47,9 @@ program.arguments('<project-directory>').action(async (projectName) => {
       spinner.info(`${success(`Inside that directory, you can run several commands:`)}
   ${cmd_start}
 
+  ${cmd(`npm run debug`)}
+  Provide sourcemap support for compiled code.
+
   ${cmd(`npm run build`)}
   Builds optimized code under the dist directory.
 ${
