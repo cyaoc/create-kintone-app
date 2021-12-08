@@ -1,6 +1,6 @@
 {
   "name": "create-kintone-app",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A CLI tool for creating kintone app development templates",
   "bin": {
     "create-kintone-app": "./bin/cli.js"
