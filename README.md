@@ -1,4 +1,8 @@
-# [中文说明](https://cybozudev.kf5.com/hc/kb/article/1520851/)
+# Disclaimer
+
+このOSSは、私個人の著作物であり、サイボウズ株式会社、その他、私の所属する組織とは一切関係ありません。
+ 
+This OSS is my own personal work and does not have any relationship with Cybozu Inc. or any other organization which I belong to.
 
 # create-kintone-app
 
